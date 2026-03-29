@@ -1,0 +1,2303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinSyt — Solution Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A1628;
+  --navy-mid: #112240;
+  --navy-light: #1B3461;
+  --teal: #00C9A7;
+  --teal-dim: #00A389;
+  --gold: #F4B942;
+  --gold-dim: #C9921E;
+  --ice: #E8F4F8;
+  --white: #FFFFFF;
+  --muted: #8DA6C0;
+  --text: #D4E5F2;
+  --border: rgba(0,201,167,0.18);
+  --card-bg: rgba(17,34,64,0.85);
+  --glass: rgba(255,255,255,0.04);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+
+/* ── NOISE TEXTURE ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(10,22,40,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-logo-img {
+  flex-shrink: 0;
+}
+.nav-name-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+.nav-byline {
+  font-size: 10px;
+  color: var(--teal);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.06em;
+  opacity: 0.8;
+}
+
+.nav-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  color: var(--white);
+  letter-spacing: 0.02em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color .2s;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.nav-links a:hover { color: var(--teal); }
+
+.nav-badge {
+  font-size: 11px;
+  background: rgba(0,201,167,0.15);
+  color: var(--teal);
+  border: 1px solid rgba(0,201,167,0.3);
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 120px 2rem 80px;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 60% at 80% 20%, rgba(0,201,167,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(244,185,66,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 80% at 50% 50%, rgba(17,34,64,0.9) 0%, var(--navy) 100%);
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,201,167,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,201,167,0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--teal);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  padding: 6px 14px;
+  border: 1px solid rgba(0,201,167,0.25);
+  border-radius: 99px;
+  background: rgba(0,201,167,0.06);
+}
+
+.hero-eyebrow::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.hero-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(3rem, 7vw, 6rem);
+  color: var(--white);
+  line-height: 1.05;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--teal);
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--muted);
+  max-width: 600px;
+  margin-bottom: 2.5rem;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.meta-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--glass);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 99px;
+}
+
+.meta-pill strong { color: var(--white); }
+
+.hero-cta-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  padding: 14px 28px;
+  background: var(--teal);
+  color: var(--navy);
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all .2s;
+  letter-spacing: 0.02em;
+}
+
+.btn-primary:hover { background: var(--teal-dim); transform: translateY(-1px); }
+
+.btn-ghost {
+  padding: 14px 28px;
+  background: transparent;
+  color: var(--white);
+  font-weight: 500;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all .2s;
+}
+
+.btn-ghost:hover { border-color: var(--teal); color: var(--teal); }
+
+.hero-stats {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 1;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  text-align: right;
+  backdrop-filter: blur(8px);
+  min-width: 180px;
+}
+
+.stat-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-val span { color: var(--teal); }
+
+.stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── SECTION WRAPPER ── */
+section {
+  position: relative;
+  z-index: 1;
+  padding: 80px 2rem;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ── SECTION HEADER ── */
+.section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-tag::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: var(--teal);
+}
+
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--white);
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.section-lead {
+  font-size: 1.1rem;
+  color: var(--muted);
+  max-width: 600px;
+  margin-bottom: 3rem;
+  font-weight: 300;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 0 2rem;
+}
+
+/* ── OVERVIEW ── */
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.overview-body {
+  font-size: 1rem;
+  color: var(--text);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.overview-body p { margin-bottom: 1rem; }
+
+.overview-body strong { color: var(--white); font-weight: 500; }
+
+.overview-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+}
+
+.info-key {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+
+.info-val {
+  font-size: 13px;
+  color: var(--white);
+  font-weight: 500;
+  text-align: right;
+}
+
+.info-val.teal { color: var(--teal); }
+.info-val.gold { color: var(--gold); }
+
+/* ── MARKET PROBLEM ── */
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 3rem;
+}
+
+.problem-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 24px;
+  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+  transition: transform .2s, border-color .2s;
+}
+
+.problem-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0,201,167,0.4);
+}
+
+.problem-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teal), transparent);
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+.problem-card:hover::before { opacity: 1; }
+
+.problem-icon {
+  width: 44px; height: 44px;
+  background: rgba(0,201,167,0.1);
+  border: 1px solid rgba(0,201,167,0.2);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+  font-size: 20px;
+}
+
+.problem-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.problem-body {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── FEATURES ── */
+.features-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.feature-block {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+  backdrop-filter: blur(8px);
+  transition: border-color .2s;
+}
+
+.feature-block:hover { border-color: rgba(0,201,167,0.35); }
+
+.feature-block.wide {
+  grid-column: span 2;
+}
+
+.feature-block.gold-accent {
+  border-color: rgba(244,185,66,0.2);
+  background: rgba(244,185,66,0.04);
+}
+
+.feature-block.gold-accent:hover {
+  border-color: rgba(244,185,66,0.4);
+}
+
+.feature-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.feature-num.gold-num { color: var(--gold); }
+
+.feature-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.3rem;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+
+.feature-body {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.feature-list li {
+  font-size: 13px;
+  color: var(--text);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.5;
+}
+
+.feature-list li::before {
+  content: '→';
+  color: var(--teal);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.feature-list.gold-list li::before { color: var(--gold); }
+
+/* ── USERS ── */
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.user-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px 28px;
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.user-role {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+.role-institution {
+  background: rgba(0,201,167,0.12);
+  color: var(--teal);
+  border: 1px solid rgba(0,201,167,0.25);
+}
+
+.role-customer {
+  background: rgba(244,185,66,0.12);
+  color: var(--gold);
+  border: 1px solid rgba(244,185,66,0.25);
+}
+
+.user-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.4rem;
+  color: var(--white);
+}
+
+.user-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.user-capabilities {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.user-capabilities li {
+  font-size: 12px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cap-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cap-dot.teal { background: var(--teal); }
+.cap-dot.gold { background: var(--gold); }
+
+/* ── TECH STACK ── */
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 2rem;
+}
+
+.stack-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  transition: all .2s;
+}
+
+.stack-card:hover {
+  border-color: rgba(0,201,167,0.35);
+  transform: translateY(-3px);
+}
+
+.stack-layer {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--teal);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.stack-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+
+.stack-sub {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.stack-note {
+  background: rgba(0,201,167,0.06);
+  border: 1px solid rgba(0,201,167,0.15);
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  text-align: center;
+}
+
+/* ── MARKET OPPORTUNITY ── */
+.market-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 2rem;
+}
+
+.market-stat {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 24px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+.market-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.4rem;
+  color: var(--teal);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.market-val.gold { color: var(--gold); }
+
+.market-label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.market-desc {
+  font-size: 11px;
+  color: var(--text);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.traction-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.traction-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.traction-icon {
+  width: 36px; height: 36px;
+  background: rgba(0,201,167,0.1);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.traction-text {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.traction-text strong { color: var(--white); display: block; margin-bottom: 2px; }
+
+/* ── DIFFERENTIATORS ── */
+.diff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.diff-card {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  backdrop-filter: blur(8px);
+  transition: all .2s;
+}
+
+.diff-card:hover {
+  border-color: rgba(244,185,66,0.3);
+  transform: translateX(4px);
+}
+
+.diff-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.5rem;
+  color: rgba(244,185,66,0.2);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 48px;
+  text-align: center;
+}
+
+.diff-content {}
+
+.diff-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+
+.diff-body {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* ── NEXT STEPS ── */
+.steps-track {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  padding-left: 40px;
+}
+
+.steps-track::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 24px;
+  bottom: 24px;
+  width: 1px;
+  background: linear-gradient(180deg, var(--teal), rgba(0,201,167,0.1));
+}
+
+.step-item {
+  position: relative;
+  padding: 20px 0 20px 24px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.step-dot {
+  position: absolute;
+  left: -34px;
+  top: 26px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--teal);
+  border: 3px solid var(--navy);
+  box-shadow: 0 0 0 3px rgba(0,201,167,0.2);
+}
+
+.step-content {}
+
+.step-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--teal);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.step-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+
+.step-body {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* ── FOOTER ── */
+footer {
+  position: relative;
+  z-index: 1;
+  padding: 48px 2rem 32px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.footer-brand {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  color: var(--white);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.footer-brand span { color: var(--teal); }
+
+.footer-tagline {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 24px;
+  font-style: italic;
+}
+
+.footer-contact {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.contact-item {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.contact-item strong { color: var(--teal); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.footer-legal {
+  font-size: 11px;
+  color: rgba(141,166,192,0.5);
+  letter-spacing: 0.04em;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+/* ── NAV HIGHLIGHT ── */
+.nav-links a.active { color: var(--teal); }
+
+/* ── SCROLL ANIMATIONS ── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .hero-stats { display: none; }
+  .overview-grid { grid-template-columns: 1fr; }
+  .problem-grid { grid-template-columns: 1fr; }
+  .features-layout { grid-template-columns: 1fr; }
+  .feature-block.wide { grid-column: span 1; }
+  .users-grid { grid-template-columns: 1fr; }
+  .stack-grid { grid-template-columns: repeat(2, 1fr); }
+  .market-grid { grid-template-columns: 1fr; }
+  .traction-list { grid-template-columns: 1fr; }
+  .diff-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+
+/* ── STATUS BADGE ── */
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,201,167,0.1);
+  border: 1px solid rgba(0,201,167,0.3);
+  color: var(--teal);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 99px;
+}
+
+.live-badge::before {
+  content: '';
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ── QUOTE BLOCK ── */
+.quote-block {
+  border-left: 3px solid var(--teal);
+  padding: 16px 24px;
+  background: rgba(0,201,167,0.05);
+  border-radius: 0 10px 10px 0;
+  margin: 1.5rem 0;
+}
+
+.quote-text {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem;
+  color: var(--white);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.quote-sub {
+  font-size: 12px;
+  color: var(--teal);
+  margin-top: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.footer-logo-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.footer-byline {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.footer-byline strong {
+  color: var(--teal);
+}
+
+.exclusivity-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--muted);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 99px;
+  padding: 5px 14px 5px 8px;
+  margin-bottom: 1.5rem;
+  width: fit-content;
+}
+
+/* ── MODULES V2 GRID ───────────────────────────────────────── */
+.features-layout-v2 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+/* Rows 1 & 2: 3 equal columns, auto */
+/* Row 3: Module G spans all 3 */
+/* Row 4: Module H spans all 3 */
+.fb-fraud, .fb-command { grid-column: span 3; }
+
+.fb-teal {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+  backdrop-filter: blur(8px);
+  transition: border-color .2s;
+}
+.fb-teal:hover { border-color: rgba(0,201,167,0.4); }
+.fb-teal::before {
+  content: '';
+  display: block;
+  width: 32px; height: 3px;
+  background: var(--teal);
+  border-radius: 2px;
+  margin-bottom: 14px;
+}
+
+.fb-gold {
+  background: rgba(244,185,66,0.04);
+  border: 1px solid rgba(244,185,66,0.22);
+  border-radius: 14px;
+  padding: 28px;
+  backdrop-filter: blur(8px);
+  transition: border-color .2s;
+}
+.fb-gold:hover { border-color: rgba(244,185,66,0.45); }
+.fb-gold::before {
+  content: '';
+  display: block;
+  width: 32px; height: 3px;
+  background: var(--gold);
+  border-radius: 2px;
+  margin-bottom: 14px;
+}
+
+.fn-gold { color: var(--gold) !important; }
+
+.fl-gold li::before { color: var(--gold) !important; }
+
+.standalone-note {
+  display: block;
+  margin-top: 8px;
+  font-style: italic;
+  font-size: 11px;
+}
+.standalone-teal { color: var(--teal); }
+.standalone-gold { color: var(--gold); }
+
+/* Module G — fraud, full-width horizontal layout */
+.fb-fraud {
+  background: var(--card-bg);
+  border: 1px solid rgba(0,201,167,0.2);
+  border-left: 4px solid var(--teal);
+  border-radius: 14px;
+  padding: 28px 32px;
+  backdrop-filter: blur(8px);
+}
+.fraud-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.fraud-inner .feature-num { margin-bottom: 6px; }
+.fraud-list { margin-top: 0; }
+
+/* Module H — command centre, full-width */
+.fb-command {
+  background: linear-gradient(135deg, rgba(0,201,167,0.08) 0%, rgba(17,34,64,0.9) 100%);
+  border: 1px solid rgba(0,201,167,0.35);
+  border-radius: 14px;
+  padding: 36px 32px;
+  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+}
+.fb-command::after {
+  content: 'COMMAND CENTRE';
+  position: absolute;
+  top: 20px; right: 28px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  color: rgba(0,201,167,0.25);
+  font-weight: 500;
+}
+.fn-command {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: .1em;
+  margin-bottom: 8px;
+}
+.command-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0,201,167,0.15);
+}
+
+@media (max-width: 900px) {
+  .features-layout-v2 { grid-template-columns: 1fr; }
+  .fb-fraud, .fb-command { grid-column: span 1; }
+  .fraud-inner { grid-template-columns: 1fr; gap: 16px; }
+  .command-grid { grid-template-columns: 1fr; }
+  .fb-command::after { display: none; }
+}
+
+/* ── MODULES CAROUSEL ─────────────────────────────────────── */
+.modules-carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  padding: 4px 2px 20px;
+}
+
+.slide-pair--columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.slide-pair--stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Dot navigation ── */
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.carousel-dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.carousel-dot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  transition: all .2s;
+}
+
+.dot-inner {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(0,201,167,0.25);
+  transition: all .3s;
+}
+
+.carousel-dot.active .dot-inner,
+.carousel-dot:hover .dot-inner {
+  background: var(--teal);
+  transform: scale(1.35);
+}
+
+.dot-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color .2s;
+}
+
+.carousel-dot.active .dot-label {
+  color: var(--teal);
+}
+
+/* ── Arrow buttons ── */
+.carousel-arrow {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all .2s;
+  flex-shrink: 0;
+}
+
+.carousel-arrow:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+  transform: scale(1.08);
+}
+
+.carousel-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Progress bar ── */
+.carousel-progress {
+  height: 2px;
+  background: rgba(0,201,167,0.1);
+  border-radius: 1px;
+  margin-top: 16px;
+  overflow: hidden;
+}
+
+.carousel-progress-bar {
+  height: 100%;
+  background: var(--teal);
+  border-radius: 1px;
+  width: 0%;
+  transition: width linear;
+}
+
+/* ── Counter ── */
+.carousel-counter {
+  text-align: center;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 10px;
+  letter-spacing: 0.08em;
+}
+
+.counter-sep { opacity: 0.4; margin: 0 3px; }
+
+/* ── Slide entrance animation ── */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.carousel-slide.entering .fb-teal,
+.carousel-slide.entering .fb-gold,
+.carousel-slide.entering .fb-fraud,
+.carousel-slide.entering .fb-command {
+  animation: slideIn 0.5s ease both;
+}
+
+.carousel-slide.entering .slide-pair--columns > *:nth-child(2),
+.carousel-slide.entering .slide-pair--stack > *:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .slide-pair--columns { grid-template-columns: 1fr; }
+  .dot-label { display: none; }
+  .carousel-controls { gap: 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo-img">
+      <img src="data:image/png;base64,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" alt="Valtara AI" style="width:36px;height:36px;border-radius:50%;object-fit:cover;display:block;">
+    </div>
+    <div class="nav-name-stack">
+      <span class="nav-name">FinSyt</span>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#solution">Solution</a></li>
+    <li><a href="#stack">Stack</a></li>
+    <li><a href="#market">Market</a></li>
+    <li><a href="#differentiation">Edge</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#nextsteps">Next Steps</a></li>
+  </ul>
+  <span class="nav-badge">Discovery Brief · 2026</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Investor &amp; Partner Discovery Brief</div>
+    <div class="exclusivity-bar">
+      <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADLAMwDASIAAhEBAxEB/8QAHQAAAgICAwEAAAAAAAAAAAAAAAcGCAUJAQMEAv/EAGIQAAECBQICBQUFEAkQCwAAAAECAwAEBQYRByESMQgTQVFxImGBkaEUFTKx0QkWFxgjN0JSVmJydZSzwdIkM0NVdJKVstMlJic1NjhXc4KToqO0wuHwNERFRlRjZISlxPH/xAAaAQACAwEBAAAAAAAAAAAAAAAEBQACAwEG/8QANhEAAQQBAgMFBQcEAwAAAAAAAQACAwQRBRIhMUETMlFhcQYUIqHRIzNSYoGxwTRCkeFDU5L/2gAMAwEAAhEDEQA/AKZQQQRFEQQQRFEQQQDc4ERREcgEnABJPYIy9Dt6oVWbRLy8u644vk2hOVH5B5zDatnSqWkGROXFNtMNJGVtIUB/GWeXo9cNKek2LPEDA8SlGoa3UoD7R3HoBzKTUtTJt8gBspzyyNz6IltG00uGf4VCnPpQd+J3DQx6d4Y01d9l2yCzb9Mbmn07dalOB/HVlR9G0Rmq6l3LNlQl3mZNB7Gmxn1nJhuzTKUH3jtx8kmOq6pbGa8QYPF/0HFe+naNPcCfdk/KMZ3PCguEfxsRlEabWrJjhnq+EqHPC22vjzC2qFaqs+omcqEy/n7dwkR4SpR+yPrghstWPgyL5rM0tTlOZLOPINH7lNdVn6etkBVwnP8ADWj8SY5+cewnh9QuIEn/ANYyr2YhT8R7zBxKzsTFve4v+oKHSrPSy75fRNCZ0hp80ku0+tNuDsC2UqH8YH9ERys6Q1mXBVKNsTY55Zd4T6lY9kRZp95lfG064hQ7UqIMZym3rc8hwhirPqSPsXT1g/0sxR/uUvfjx6KNg1eDjHOH+Thj5hRisWpVaYvhmpZ9gnkHWynPgeRjCvS7zP7Y2pI7+z1w7KTqk46n3NX6YxNMq2UpvGT/AJJyD7IyhoNiXgwpdIdbk5xQyUo8kg+ds7EeHrgV+iwTcYH8fArYe0FmpwvQkD8TeI+oVeoIYN56a1aihcwlkPSw365gZSPwhzT8UQOZl3ZdXC4gjuPYYRWqM1V2JAvRU79e4wPhcCF1QQQQIjEQQQRFEQQQRFEQQQRFEQQR3ycs5NOhtseJizWlxwFxzg0ZK+Jdlx9zgbTk/FDO0702mqnwT07xS0nz60jynPwB2Dz/ABxINPrCk6VIe/lyhDLDaesSw73fbL7/AMHt9kY2+r/m6sVyFLKpSnjKSUnC3RjG+OScdgj1FPTIqrRLY4k8gvH3NXnvyGtQ5DvP6D08SpFVbstyz5VVLtmUafmfgrdG6Qe8q+yPhsPNC2rtwVatu9ZUJ1x0ZylIOEp8ANhGMJzud4MxtNafLw5DwC2o6TBVO/G555uPEn6fouDnwPmggggbCZogj2UOnPVetSNKllJS9OzLcs2VcgpagkZ82TFqU9DZvhGdRVZxvijbfnoxkmZH3irtjc/kqlQRbb6TVr/CKv8AkYf00IHW/Tx/TK+3bZdqSKkgS7cwzMBrqitCsjdOTghQUOZ5Z7cRyOwyQ4aV10TmjJCg8c7iPthl59wNsNLdWRkJQkqJ9Aj0e9VU/e6c/wAwr5I2zjqqYK8fOPttxbawtC1JUDkEHBjsmJOclkhUzKTDCVHALjZTn1x0R0HwXCOhU7tTUiqU5SZercVRlTsSs/VEDx7fTEhrFo23eVNcqVtutMzB3W1jCSe5SfsT4bH2wo8x76LV6hR51M5T5lbLieeOSh3EciINjt5GyYbm/NI7Oj7Xmek7s3/I+o/lYa47en6POuS8xLuNLQfKQobjzg9ojCRYqm1OiajUk06pNIlaqhOUFPMffIzzHek/8YUV92hUKBUFNvNbHKkLSPIdT3jz+aFOo6T2be2gOWpjpWtmd/u1obJR08fMeIUSggghCvRogggiKIggjkAk4AyTEUX3LMrfeDaBufZDu0us6UpNOFy10IaZaT1rCHB2Y/bFDv7h6e6I9o7ZvvrPe65xvMnLqBdz+6K5hHnHf/xjIaq3YatOe9cg5inyyseTydWO3wHZ6/D1emVGVYveJRlx5BeO1i5Lfse4Vjgf3u8B4DzKx+oF3zNxThaaUpqnNq+pNfbffK8/xREzvzggiSSukcXOPEplVrRVYhFEMAL00yRnqnPsyFOlJicnH1cDTDDZW44ruSkZJPhEw+hBqj9wNw/kK/kiYdCxKVa+UxRSCUyk0U5HI9URn1Exf6F1i06J+0BHxQh4ytZz2kep7TSnF2FcXCkcRxIuE48AMmIWpKkLKFpKVJOFJIwQe6Nssax9aUIb1ivJCEhKU12dwAMAfV1xatZdKSCFyaIMGV4dM/rj2xt/2vKfnkxtGjVfZk/L0q8KLVJsqEvJ1BiYdKRkhCHEqOB4CNj8vqnpo+yh1OoNqpSsZAXVmEKHilSgQfMRmB77SSMLSsQAcqYRRPp0/Xtb/FEv/Oci6a7rtZu30XCu5KMijOHCKgqebEuo5KcBzi4ScgjnzBEUT6Xlz0O69YXp2gVBmoScvIsyyphlXE2taeJSuFXJQHEBkbRnSae0V7BGxOb5n3JyotO5p8MN+6lz7bKneEcRQG8hOe7KicRZ+Kz/ADP3+4W5Pxmg/wCqEWYjKzxlKvCBsCgnSDk5Wd0SvBuaYbeQikvvJCkg8K0IKkqHcQoAg+aNakbMtdfrL3n+JJv80qNZvyZg2gfhKwsj4kQYggg4FDLulpl6VfQ/LuLadbPEhSTggw3barFOv+grolb4UVFCcpWAAVY/dE+cdohOR3yM0/Izbc1KuKaebUFJUnmCIKq2DCcHiDzCV6lprbjMtO17eLXdQfouq+7YnKBVHWJhvCh5QIHkuJ7FiIxFippMpqPZfXMhCKtKjl9/jcfgqxt5x5jlB1mRckZxba2yjCiCkj4JHMQr1fTxC7to+6UZoWqOtMMMwxIzgR/PoV4YIIIRp+iMxalKfqlUZYYbK3HHA22O9R/QIxCQVKCQMknAEO3Q+htSktM3DO8KWZZtSG1KGwOMrX4Abekw00mp7zYAPIJTrWoCjUdJ15DzKyl9TrFnWbLW1TVgTUw2etWnY8J+ErxUdvAeaFEQScnnGVuurvVuvTVRdJw4s9Wk/YoGyR6sRioeW5u1fhvIcB6JVpNI1IPj4vdxcfM/REEHjBAoTNOroVfX7puT/wBTmfzZi/m3fFBeiJZNer+orF0yk+/R6TQVF6bn0EJ4vJOWQTt5QzxdgTkncjMs1j6UNzm9JmV08npeWokp9SRMOSyHFTSgd3BxA8KTySBuQMnngLbERll+FGRPDGcVc6NZOtp/syXoR+/07+fXE+pnSH1srdRlaPTa3LrnZ55EtLpRT2AouLUEpAJTgbkbmM5M9E/VOoTLs/O162HJqZWXXluzkwVqWo5UVHqTk5JzuYtAwV3Zeea5I7tR8IVdc9sBxmLDfSialfv1af5VMf0EJe/bTrNkXZOWzXmm25+UKQvq1cSFBSQpKknAyCCOzxxBjJmPOAUOWOaMlWH6J8nNX9oxfGm1Rl3DTVYckZpacttPrGQn/JWhtzG/NRPZCp+gBrAOVlTe3L9ksfrxYP5n/wDW7uEj99h+aRFlYXvsOhkdtRTYg9oJVYrE97ujBpnNzN3Vb3fcNaUl9mhyy0kJWlJAAVucb4W4fJ2ASCQOKEHpgXrkkWxb4HZnrv14W3SemZiZ14ur3Q+691U31bfGsq4EBCcJGeQGTsIWsFR12uG5/ElYulcDgJ56g9Ju9rvtKfttylUenS8+0WZh6XQ4XC2fhJBUogZGx2OxMSHoD06Qnb2uJ6bkpeYcYkEdSpxsK6vic3xnlyEVrh99C+97Xsu8K2u6Kq1TGZ2RShl50HgKkryUkjkcHO+23hHZogyIhgXGOLnguKvD72U3975T/Mp+SKJ9NqQkafrapMjKMSweprDzgaQEhSyVgqIHbhIi41s6n6f3LWGqPQrrps/UHgpTcu04eNYSCVYBAzgAmKZ9NGrSVW1ym0SS1rMhJsyb/E2U4dTxKUNxuMLG/IwHSDhLg+CIsY28Ele2CCCGyBWesavu29cDM4lRMuryH0fbIPyc/ERJta7aZdQi4ZAJVLzgT1hTyCyPJX4Ef87wu4bWmE21cVnz1rz7mVtoPVE7kIJ2I/BVv6RB1cNnjdWd15eqQaqDSmZqEfTAd5t8f0SBUkpUUqGCDgxxGYuumvU2qOsPIKXG1ltwffCMPHj5ojFIWHovZwyCVge3kV7qLLqmJ9CUpJIOwxzPZD0v1z52NOJChMngfmEht3HaPhLP8Yj0GFxo3TBP3XIhScpS71qu7CNx7REh1mqJnLuVLJUC3KNpbAHLJHEfjx6I9PpbOwpOk6u4LyWrH3vVIq/9rBuP7D5qEE5gjk7HAjiMgnKl2jFMkKzqxa9KqcsiZkpqpstPsr+C4grGUnzGNgP0IdL/ALgbc/IG/kigOiU9J03V605+oTLMpKMVRhbrzywhDaeMZUpR2AHedh2xsV+fmyfuwt701Jn9aFl4uDhtRdcNI4pCdMmojT/TOkWdZ0lJ0Sl1p98TaJNoNcSEBBKBjsUV+V2kDHIkRTSLd/NBVdbR7NeaStxkvTR61KSUDKWikcQ2yQCQM7gE9kVEgmmPs8rKfvqY6H/Xlsz8eyf55MbNfPGsbRqYYlNXLPmZl1DTLdbk1LWs4CR1yMknsEbORygS/wB4LeryKIoF00h/Z8qY7Pcktj/NCL+xVLpYaLXJddzTd+Wk41WMNIZnKayfq7am0gZRvhZxglOyuWAcxlTcGSZPBXnBc3glv0btc5LSui1SkVGgzNRZnJkTKHJd5KFJVwhJSQoYI2BzmGyemHbXZZ1X82ZhuK7NaJ6rutJcTYlXAWkKHE0EncdoJyPA7xHLxs66LQmWJe56HO0pyYSVMiYbwHANjg8jjIyAdsjPOD3QQyOz1QwkewLs1JuVV5X5WboVKCT98ZpTyWAvj6sckgnAycDniI7tDy6Jek9uanVGvvXI7Oe5aU2wEsS7gbLinS5upWCcANHYdpG+29hfpWtJs/8AQqt+Xq+SI6zHEdvgo2FzxuVCPTHPdF2r96MGnMtZlXm6P76yc/LSbr7DipsrTxoQVAKSRgpJABxg+eKSe2NYpmyj4VR8ZYeKyVr1uftu4qfXqW8GZynzCJhlRzjiSeRHaCNiO0EiLA9K+h0+8LRt7W222cS1Sl0S9USNy0v4KVK86VAtKPLyUCEfpjKS0/qVa0hOMIflZmsSjLzSxlK0KeQFJI7QQTGzdqk0pmne9rVMkm5E4/YyWEhrY5+ABjsED2pezkaQFrCze0rVLt3weMXQ6ddCokjpTS56Ro8hKzQrTTQeYl0IXwFl8lPEBnBKUkjvA7opfBEMvas3YWMjNhwiM7YdWVRrnk5wr4WisNvedBOD6ufjGCjkEg5EEMeWODh0Q80TZo3Ru5EYU619oobqbdSbR5E01uf/ADEc/WOH2wn4f9xE3Bo/KzyiFvygQpZ7fJPAfYcwhJlvqphxGMAKOPCBdfhAlEreTghvZedzqpgfzjJb/j/ScvR4kh7qm5wpyGpdKAT2Fas/7sQq4JpU/XJ6cUrPXPrX6CSYY+kA9x2LW55Gy0BWD+A2SPjhVLPEsnvMNZW9nViYPVA0T2up2ZfDDfllcQQQQEni57Y4G3LaCCOLquZ0YaRWtRtCZ62L7k25y11Es0iaU7+yW+E48nY7IV8FWdsFOCnAC+nOiFqCmbeTJ1+13ZcOKDK3X30LUjOxUkNEA4xkAnHeecProbf3vlA/xs1/tDkOGE7p3xyODUcImuaMrXbq1oRe2mtAbrtaepE5IKeDKnJF9a+qUrlxBaEkA45jPYDzEQFu5biabS23X6shCQEpSJtwAAchjO0Xl6a31hah/DJb84IoJB9aQys3OQ0rdjsBZf56Ll+6Krn/AN658sZ/SzUa7rFudNSoVWeT7qfSZyXeUXGprJ36xJO53PlDyhk4IiE+EfTailaVNnCwQU43OeyN3MBGFm1xytsnZFTPmh+P6xu3+2HM/wAGiY6rau3bpno7bTtYNPmL6qyUrcaWwUtsoHlLKkJI3AKEbEAqKiNhiKq6taq3VqfMU965VSQTT0uCXblWS2lPWcPGTkkkngT242hbVgdv39EXNK3bhPr5njzvk/i//wCzFsoot0OtT7U06qNxS92TbsjL1RuWU1MpYW6lKmi7lKggFW/WbHGPJMWP+mQ0XH/fL/4yb/oopaieZSQFaF7QzGUwr6/uIr34tmfzao1YxsYper2l+oDj1oUK7m3ahU5Z1hlK5N9rPEhQOC4hKSdyeHOTgxQnUaza1YV2Tdt11gtzMucocAPA+2c8LiD2pOPRgg4IMb0fhJa7ms7PHBC69OqjKUjUK26tPudVKSNWlZh9eM8LaHkKUcduADtGxBOr+lykhQv63gCM7zyAfUTtGtLl2wCCZqwlIyVlHMYxwVuumnqBZVzaZ0yk29c1Nqs8Kw3MKalHg4UtpZeSVEjYbrTz3OfGKiQQReKIRN2hUkfvOUQDaCCNQqJsaSn3xsetUhflfC4Qfv0YHtSYSFbb6ueUO8An4v0Q4tB5hXvtUJUclS6V+lKsD+dC7uWTQ3Xp1rAw2+tA8AoxtqMRnpxnqMhJtJeINTss6Ha7/ITP09PBpJXlDmTMD/VJhUw19ND1ullfZG5w/wC1oQqIIt/dRen8rPSP6q0Pzj9giCCCAE9RBBBHVFsC6GTrTnR/orbbiVKamJpDgB+Crr1qwe7ZST6RDkyI1WUa4K/RUOIo1bqVNS4QVplJpbQURyJ4SMx7/n7vj7sri/lR79aFz6TnOJyi22A0YwrrdNt5prQibQ44hCnZ6WS2CccSuPiwPQCfRFBzzjI1mvVytdX78Vmo1Lqs9X7rmlu8GeeOInEY6Cq8RiZtWEj97spkdG2z6NfOrdMt+4G3Xactt511ptwoLnAgqCeIbgE4zjBx2iLm0ro+6Q0ypStSk7QSiZlXkvMqXPzTiQpJCgSlThSrcciCDFUuhaca+0sHb9izP5oxf6Abr3CTAKJrtBbkqs3Tts2jO2hLXzwvprEvMsyXF1yi2plXGeHgJ4U4O+U47c5imX/O8bIOkPdFv2jp777XLa8rcsj7sba9xTKUKTxqCsLwtKhkYPZ2xXL6N2ijn7ZoTS0/gS8t+oI0qSvEeAMqkzWl3NV9kqHWp6XTMyVHqE0wo4DrMstaSRzGQMR5Z2Tm5GYMtOyr8q8Ny282ULA8DvGzPR6q0at6bUWq29R0UalzLKlS8khKUhkcagQAnA5gnbvipPT2AGstNwMcVBYz5/q8xGsNovk2kKj4Q1ucqv8AKzD8pNNTUq84xMMrDjbrailSFDBCgRuCDjcRsT+h7b2qGnNpzeoUmirVNFOYfM2ypUuvjcbSpYygg4JwSOWRnA5Rro7Y2jaa/W5tn8USv5lMZ3iWhpCvWAOQUu/pZNHvufm/5Rf/AFoiWr/Ru05p2m1erFvyk5TqjTZF6dacM2t1K+qQVlCkrJ2ISRtgjY+aLIxFdY/rRXl+IZ7/AGdcBMmk3DiiHRtwVrDgggh6lpRBBBEUTB0KURdcynsMmr+eiIpeQCbtq6RyE68P9MxLtB0f1zTjvYmTI/00xDbudC7pqq8/Cm3T61mDpeFNnqUircdYmx+Fv8qf6CvIm6LU6c6dloQrH4QIP6IWc22WZpxpQwUKIPoiU9H+ohi4PcqlYTMNLa37x5Q9gMeLUWQNOvGoshOEreLqB5leV+n2Rnu7WlG/w4K0A7DV54vxAOH7FR6CDbGxzBAidogggiKIgggiKIggj20KmzNZrchSJIJM1PTLcsyFHA41qCU5PiREzjmuhfdvVqq29WZasUSffkKhLKKmX2VYUkkEH0EEgg7EEg84n/0wGsH3bTX5Mx+pDkY6G2WUF/UPhdKRxhFIykHtAPXDI8+BHgurohzdMtyfqNMvdE/Nysut5uWdpvVJdKRnh4w6rhJHLY7+uBTYgceK2EUjQkRfGpV83vJsSV03HN1GWYc6xtlSUIQF4I4uFIAJwSMnvPfESgggoNDeSxJJPFSKkX1e9Hp7VOpF43DT5JrPVy8rUnmmkZOThKVADJJPKMZXa1WK7Pe7q5Vp+qTfAEdfOzK3nOEZwOJZJwMnbzx1UqnVCrT7VPpUhNT848cNsSzKnXF9+EpBJ9ESL6GWpP8Ag9u3+Rpj9SKHYw56rvxFRqnyc3UZ5iRkJZ2ZmphwNMstJKlOLJwEgDmSTG0eyJKYptl0SnTiA3MytOl2XkcQPCtLaUqGRtsRFXdOLZoPR9sQakX7LJmLvn0FFJpZIC2cj4IzyWQRxq+wB4RuSFIa5dUr/r1enKxM3XV5d2adLhalZxxplscglCAcAAADv78neBJWGycDkFuxwi4nmtmZiH63TUvKaOXk9MuoabNEm0AqOMqUypKR4lRAHnMa6/n7vj7sri/lN79aPHVrmuSrywlqrcNWn2AriDczOOOpCu/CiRmM20CCDlWNkEYwsTBBBDNCIg7IIIiiaehbSWZar1FzYIShOfMOIq+IQn7jnHHKq66FbuErPiSYc9tD3i0enZ1WEuTgcKc8/K+pj5YRFRXxzrh7jj1bRbWHmKtGwc+aU6E3t71mc8sho/QLL2LUlUuvy00CfqTqXMZ5gHcekQ1NcKeh33vrzGFNvo6pShy5cST6QT6oSEu4WXkOJ5pMWAtNbd5aYu0hRCpqVSENknfI3bPq8mOaJJ20D6558wp7QN91sw3hyB2u9D9EoPPBH26hTTq21ghSDgjuMfEcIwm2c8UQQQRxREEEfbLLrzgbZacdcPJKElRPoG8RRfESnSH67Fn/AI9ksflCIwXvVVM7U2cPgyr5Isv0XNEEy6ZbU6//AOp0hIkTlPln1dX8DyhMOk/BQMZSDzxk7YCsppGtaclaMaSVcOPFcH9oah/BXP5piude6X1uSdYmpWl2rO1KTacKWpszQZ64DbiCCkkA74zvjnjlGRsLpTWndVxsW/W6G9QmJ3LSJp6aDjXGdgleEjhBzji7DzwNwp93lHxEI0ysPDKpCCMQRby6+iDLzdwzc1b12JptNdXxsSr8op5bIPNPHxjIBzjIzjGc84xf0nFR+72U/k1X9JDNtuLHEoQwvzyUU6CMsiY1qmnVkhUtRX3UY7SXGkerCz6YvT4eMIDSbSi3tAJSt31dN0JmlJlSx1wZLTbbJUglITklTilpSBjw7Y8U50vdP0yzqpS37nemAkltt1lhtKldgKg6ogHvAPhAE4M78s5ImMiNuHJS9O9xxWs8m0pxam0UZnhSVHAy67nA88V/iea6ajL1RvcXKqkppaUyjcsiXEwXtklR4irhTkkqPZyxEDhlA0tjAKDkdudlEEEEaqiIIII6oiO+Ql3JydYlGk8TjzgbSB3k4EdET/Rai+7a6uqvJ+oSQykntcPL1bn1RtXiMsgYg79ptSs+Y9B8+iyms80zRrVptvsKGG0hahyylA4RnxJPqhEEkkknJMTbV6vCs3NMLaUVMpV1bZ7ChOwI8xOT6YhEK9bsiazhvIcFv7O03VaLQ/vO4n1PFET/AEbuUUW4G0zCyJd0dU7nkEk7K9Bx6IgEdku6ph5LqOaT64ApWXVpmyN6JleqMuV3Qv5EJvaxW773Vf33lk/sWdJUojklzmoenn6+6IFDZ0/qklelnOW3Unf2S039RWd1cI+CoedPLw9MLSvUuao1UfkJxvgcaVjzKHYR5iN49Vbja7E0fdcvL6PYe3dSn+8j4eo6FeGCOcbRxAKdoi5fzP6Qk02XcVTEu37sXUUsKe4fKLaW0qCc92VExTSLl/M/Z+TVZlxUsTDfuxFRS+pniHEG1NpSFY54ykiBbn3RW0HfVm4qr0/rirEpK27bcrPOM0yfS8/NsoOA8pCkcIUe0DJOOWcHfAxaqKq9P63axNytu3HLSTj1MkEPMzbyBkMqWpBSVDsBwRnlnA7RldVx2oyi5u4cKon/ADzj3W7/AHQU7+FNfzxHg7Y9tCWhquSDriglCJltSlHkAFDJh0/unKXt5hbWY5jjsz2QR50przCTvTM/vfq5/jpX/aERr7+KNgPTPcbR0f6wlawkuTEqlAJ+EeuQcD0A+qNf0N6H3aBsn40QQQQah0QQQRFEQQQDmIii7JZlyYmG5dlCluOKCUJA3JJwIblwuMWJpwKY2tIn5tJC1A78RHlq8AMAHwjG6UW8zKS7l2VfDTDCSqX4+QxzX6Ozz+iF5qfc7twV150Ehr4LaftUDkPE8z4wY6QUaxlPedyXn5GnVr7a7fu4zl3meg/TqopNPKffU4rt5eEdUEEeNc4uOSvbgADARBBBHF1Ze1q1M0WqMzcu6W1Nr4knuPyHkfNDyq8jIajWw3U6cUNVRhGCjPbz6s+Y74PL24rtEp0/u2ctqqtvNrJaPkrQTstPak/oPZD3SdRbF9hN3D8l57W9KfYxZrHErOXn5H1RNS70tMOMPtqbdbUUqQoYIIOMR1w5LgodJv6kitUN1CKikYWDsVH7RY7D3H4+xRT8pMSM05LTTS2nm1cK0qGCDDOxWMJzzB5FDadqTLrS0ja8c2nmP9Loj7ZedYcDjLq2nByUhRSR6RHxBA2M8EzXsFVqg5VKcHg8r5Ysn0ZtdpdMq3p1qQ83NUmYR7nk52bwtKEq26h7PNs8go/B5HyccNYID6/GMpImyNwrMeWnKsxq30WbjZulczp0yzO0aZytLD00lDkoftMrPlo+1Oc9h5ZKV1J04vDTuZlGLrpQk/diVKllpeQ6hzhxxAFJO4yMg4O478xsF0LfExozZzvW9afeWVSVFXFuGkg5PeCMQhvmha2/cNmtcaes62bPCTvjDO8BQWJN+woiSJu3cEoLU6RWqdu0VikS9Zl5yWlkBDBnJZLriEjYJ49iR+Fk+iMt9NNqx/4ukfkI+WEcYIN7CPmQhxI7xU31N1VvfUb3O1c9W66Vl1cTUqy2Gmkqxji4RzVz3OcZOMZiEQQRdrQ0YCqSTzRBBBFlxEG8EHgYg5rq5+OJfpvZ71xTomZlKm6awr6ovkVn7Qfp7o50+sqauKYE3MhbFOQfLX2r8yfl7PZGd1LvWn0SkfO5bhS2EpLbimjsB2pSe/vMGwwtjZ29juj5pDfvyTS+5UuMh5no0fVY3WK85dTSaBSFoEmx5Kur2StSdgB96PafDMJ9SipRUo5JOSY+33VvOlxw5J9kdceZ1C8+5KXnl0XpNM06PT4BEz9T4nxRBBBAKYogggiKIgggiKKSWXdtRtuoImJZ08I8laTkpUn7VQ7R7RDmaetfUmnJ4sSlVQjYjHGPD7dPxeaK6x66bUJunTCX5V5ba0q4gUqIIPeO4w60/V3Vx2co3MSDVNDZbd28J2Sjk4fz4hTe6bVq9vTBTNy5UxnCH0boV8h8xjBc4YVlaqtTDAptzMpmGlAJLhSCSO5SeSh7YzVSsG3bglzULYqDTKlb8IVxN57j9kjw9kOxXjsN31nZHh1ScarNSd2Wos2/mHFp+iUcEZyvWpXaKpXu2Qc6pP7sgcSD6RsPTGEII5jECPY5hw4YKdxTxzN3RuBHksjT7gr1PlhLSFbqUowCSG2JpaEA8+QOI89SqE/Unw/UZ6ZnHQnhC33VLVjuyTy80eWCMw0DiAtclEEEEdXEQQQYz4xxREAx2mO+Tk5qcfDErLuvOq5IQkqJ9Aic23phVZ7heqrgp7B34SOJwjwHL0nPmjaKCSU4aEHa1CvUbmZ4H7/oFBJdh591LTDS3XFnCUpGST6IZVoaeNMS/vvdS0y7DY4+oUvhwO9Z7B5ufhyjJTVYsmwZZaKchubn8YUQriVn75fIeA9UKi9L9rFxOlLr5RLg5Q0nZCfAdp853jeV9aiN0p3O8AlbZL+r/DXaY4/xHmfQdPVTTUXUtkSiqNbqOolgOArQnhKk9wH2I9pHdCgfecfcLjisk+yPhRKlFSiSTuSe2OI81e1CW4/Lzw8F6fTdLr6dHsiHqepPmiCCCAUxRBBBEURBBBEURBBBEURBBBEURGUotfqlImUzElNutrT2hRBx3f8A7GLgjSOV8TtzDgqkkbJW7XjITetzWWcbCWqzKtzSeRWPIV7Bj2CJGK3plcSczcu1Lur5qLZRv+Ejb1xX6OUkpOUkg94h1Dr87RtlAcPNedn9lqbnb4CYz+U4+Sfj2nVtVLC6LX0pB5J4kPD2EEemPC/pJUAT1NVlV/hpUn5YTLc9NtjyZhfpOfjiS0eu1ltCUtVScbGOSHlJ+KDYdRq2DgxYPqhJNK1OuMss5Hm0H5qbr0qryT5M5T1jvDiv1Y7GtJ60ojrJ+QT4KUf92IybmuIcq7UvTMr+WOqYuO4FJwqt1FQPfMKP6YLL6o47D/lY9lqp/wCZv/n/AGpwzpMGh1k9XW20D4RS1t6yRiPWmh6a0Leen0Tjid8KeLm/4Lf6YSlVqtRcmCXJt1w96zxH2xjXH3nf2x1avEwDJrNeEkRxcfNEt0K9OPt7Rx+UBvzT0qOqNs0VhUvb9MT3Z4Q2nPgMk+nEL66dSbgraVNGYLLCv3NscKfTjc+kmIRBC6xrdqYbQdo8kwp+zlGq7eG7neLuJX28648ridWVHzx8QQQpJJOSngAHAIgggji6iCCCIoiCCCIov//Z" alt="Valtara AI" style="width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+      <span>Exclusively designed, built &amp; owned by <strong style="color:var(--white)">Valtara | AI</strong> &nbsp;·&nbsp; Unauthorised reproduction prohibited</span>
+    </div>
+    <h1 class="hero-title">The Financial<br><em>Intelligence</em> Platform<br>for Emerging Markets</h1>
+    <p class="hero-subtitle">FinSyt is a live, production-ready financial intelligence platform delivering digital onboarding, KYC, transaction monitoring, account behaviour analytics, anomaly detection, industry-level performance filtering, and BVN-linked ecosystem loan scoring - purpose-built for banks, MFBs, and lending firms in high-growth markets.</p>
+    <div class="hero-meta">
+      <div class="meta-pill"><span class="live-badge">Live &amp; Deployed</span></div>
+      <div class="meta-pill">Ref: <strong>FINSYT-2026-001</strong></div>
+      <div class="meta-pill">Prepared by: <strong>Valtara AI</strong></div>
+      <div class="meta-pill">Date: <strong>March 2026</strong></div>
+    </div>
+    <div class="hero-cta-row">
+      <a href="#solution" class="btn-primary">Explore the Platform →</a>
+      <a href="https://link.1prompt.com/widget/bookings/gtm" target="_blank" rel="noopener noreferrer" class="btn-ghost">Request Live Demo</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card">
+      <div class="stat-val">8<span>+</span></div>
+      <div class="stat-label">Intelligence Modules</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">360<span>°</span></div>
+      <div class="stat-label">Account Visibility</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">Real<span>-time</span></div>
+      <div class="stat-label">Anomaly Detection</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">BVN<span>-linked</span></div>
+      <div class="stat-label">Ecosystem Scoring</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="container">
+    <div class="section-tag">Executive Overview</div>
+    <h2 class="section-title">Built for compliance mandates.<br>Designed for scale.</h2>
+    <div class="overview-grid fade-up">
+      <div class="overview-body">
+        <p>FinSyt is a <strong>web-based, production-deployed financial intelligence platform</strong> that goes far beyond KYC. It delivers end-to-end visibility into the entire customer financial lifecycle — from first onboarding through ongoing account behaviour, transaction monitoring, anomaly detection, industry-level performance benchmarking, and ecosystem-wide loan scoring via BVN linkage.</p>
+        <p>Built natively for African financial services, FinSyt addresses the compliance mandate at the point of onboarding while simultaneously powering the <strong>operational intelligence</strong> institutions need post-onboarding: account turnover analysis, transaction volume tracking, overdrawn account flags, unusual deposit or withdrawal alerts, and an interactive admin dashboard consolidating all signals into a single command centre.</p>
+        <div class="quote-block">
+          <div class="quote-text">"FinSyt does not just onboard a customer — it monitors, scores, and flags their financial behaviour across the entire institution and, via BVN, across the wider lending ecosystem."</div>
+          <div class="quote-sub">Core Value Proposition</div>
+        </div>
+        <p>The platform is <strong>live and operational today</strong>. This brief serves as a discovery document for prospective angel investors, strategic partners, and pilot institutions ahead of a scheduled live demonstration.</p>
+      </div>
+      <div class="overview-sidebar">
+        <div class="info-row">
+          <span class="info-key">Status</span>
+          <span class="info-val teal">Live · Production Deployed</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Category</span>
+          <span class="info-val">RegTech / FinTech Intelligence Infrastructure</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Primary Market</span>
+          <span class="info-val">Nigeria · West Africa · Emerging Markets</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Target Buyers</span>
+          <span class="info-val">Banks · MFBs · Lending Institutions</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Platform</span>
+          <span class="info-val">Web (Mobile + Desktop)</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Core Modules</span>
+          <span class="info-val teal">KYC · Transactions · Anomalies · Loans · Fraud</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Regulatory Alignment</span>
+          <span class="info-val teal">CBN KYC Guidelines · NDPR</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Identity Layer</span>
+          <span class="info-val gold">BVN-linked Ecosystem Scoring</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Deployment</span>
+          <span class="info-val">Next.js · Supabase · Hetzner VPS</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Pilot Model</span>
+          <span class="info-val gold">Pilot Discount → Tiered Subscription</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROBLEM -->
+<section id="problem" style="background: rgba(17,34,64,0.3);">
+  <div class="container">
+    <div class="section-tag">The Problem</div>
+    <h2 class="section-title">A $4.2B compliance burden --<br>and a $12B blind spot.</h2>
+    <p class="section-lead">Financial institutions in Nigeria and across Africa face a compounding crisis -- not just at the point of onboarding, but throughout the entire customer financial lifecycle. The cost is borne in time, fraud losses, bad debt, and regulatory exposure.</p>
+    <div class="problem-grid fade-up">
+      <div class="problem-card">
+        <div class="problem-icon">⏱</div>
+        <div class="problem-title">Slow, Manual Onboarding</div>
+        <div class="problem-body">Traditional KYC processes require physical branch visits, manual document checks, and 3–7 day verification cycles. Customers abandon. Revenue is lost. Compliance risk grows.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">⚠️</div>
+        <div class="problem-title">Inadequate Fraud Detection</div>
+        <div class="problem-body">Duplicate BVNs, synthetic identities, and suspicious transaction patterns go undetected in manual review workflows. The average Nigerian bank loses millions annually to identity fraud.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📉</div>
+        <div class="problem-title">Blunt Credit Scoring</div>
+        <div class="problem-body">Without structured risk data, lending decisions default to collateral-only underwriting — excluding the 60%+ of creditworthy Nigerians with thin or no credit file histories.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🏛</div>
+        <div class="problem-title">Regulatory Mandate, No Tools</div>
+        <div class="problem-body">CBN and NDPR compliance requirements for KYC and data protection are non-negotiable for licensed institutions — yet most lack affordable, purpose-built tooling to meet them.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">💸</div>
+        <div class="problem-title">High Cost of Enterprise Solutions</div>
+        <div class="problem-body">Global KYC platforms price at $50K–$500K+ annual contracts — entirely inaccessible for MFBs and mid-tier banks with lean IT budgets and limited procurement bandwidth.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🌍</div>
+        <div class="problem-title">Not Built for African Context</div>
+        <div class="problem-body">Western platforms lack support for Nigerian document types (BVN, Voter's Card, NIN), local identity APIs, Naira-denominated risk models, or understanding of informal income structures.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📊</div>
+        <div class="problem-title">No Post-Onboarding Intelligence</div>
+        <div class="problem-body">Most institutions onboard a customer then lose visibility. Account turnover trends, unusual transaction patterns, overdrawn statuses, and large unexplained movements go unmonitored until damage is done.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🔗</div>
+        <div class="problem-title">Fragmented Loan Visibility</div>
+        <div class="problem-body">Without BVN-linked cross-institution scoring, a borrower can hold active loans at multiple MFBs simultaneously — invisible to any single lender and undetectable until default materialises across the ecosystem.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="container">
+    <div class="section-tag">The Solution</div>
+    <h2 class="section-title">Eight modules. One platform.<br>Zero blind spots.</h2>
+    <p class="section-lead">FinSyt delivers a unified, eight-module financial intelligence stack — from first customer touch through real-time transaction monitoring, behavioural anomaly detection, industry benchmarking, and ecosystem-wide loan performance scoring via BVN. Each module is equally deployable as a standalone siloed product for institutions with specific use-case requirements. Browse all eight modules below — use the navigation or wait for auto-advance.</p>
+
+    <!-- MODULES CAROUSEL -->
+    <div class="modules-carousel fade-up" id="modulesCarousel">
+
+      <!-- Slide track -->
+      <div class="carousel-track" id="carouselTrack">
+        
+        <div class="carousel-slide" data-slide="0">
+          <div class="slide-pair slide-pair--columns">
+            <div class="feature-block fb-teal">
+        <div class="feature-num">MODULE A</div>
+        <div class="feature-title">Digital Onboarding &amp; KYC</div>
+        <div class="feature-body">End-to-end customer onboarding with document capture, selfie video verification, and real-time status tracking — eliminating branch visits entirely. <em class="standalone-note standalone-teal">Available as a standalone siloed product for institutions requiring only digital KYC capability.</em></div>
+        <ul class="feature-list">
+          <li>User registration &amp; Supabase Auth login</li>
+          <li>Document upload: NIN, Passport, BVN, Voter's Card, Utility Bill</li>
+          <li>Selfie video capture with liveness detection</li>
+          <li>Real-time KYC submission status tracking</li>
+          <li>Secure audit trail for all submissions</li>
+          <li>API-driven verification via Smile Identity / Dojah</li>
+        </ul>
+      </div>
+            <div class="feature-block fb-teal">
+        <div class="feature-num">MODULE B</div>
+        <div class="feature-title">Transaction Monitoring &amp; Account Turnover</div>
+        <div class="feature-body">Continuous tracking of account-level transaction activity — giving institutions a real-time view of financial health, volume trends, and turnover patterns per customer and across the portfolio.</div>
+        <ul class="feature-list">
+          <li>Account turnover analysis: inflow vs outflow over rolling periods</li>
+          <li>Transaction volume tracking: daily, weekly, monthly aggregates</li>
+          <li>Balance trend visualisation per account</li>
+          <li>Period-over-period comparison for performance review</li>
+          <li>Drill-down from portfolio view to individual account level</li>
+          <li>Exportable transaction summaries for audit &amp; compliance</li>
+        </ul>
+      </div>
+          </div>
+        </div>
+        <div class="carousel-slide" data-slide="1">
+          <div class="slide-pair slide-pair--columns">
+            <div class="feature-block fb-gold">
+        <div class="feature-num fn-gold">MODULE C</div>
+        <div class="feature-title">Anomalous Account Activity Flagging</div>
+        <div class="feature-body">Automated, rule-driven detection of account behaviours that deviate from established norms — surfacing risk signals before they become losses, with instant tiered administrator alerts. <em class="standalone-note standalone-gold">Available as a standalone siloed product for post-onboarding account surveillance.</em></div>
+        <ul class="feature-list fl-gold">
+          <li>Overdrawn account status detection &amp; immediate alert</li>
+          <li>Unusual deposit pattern flagging: velocity, source, size anomalies</li>
+          <li>Large withdrawal anomaly detection (institution-configurable threshold)</li>
+          <li>Dormant-to-active account reactivation flags</li>
+          <li>Rapid successive transaction sequencing alerts</li>
+          <li>Severity classification: Low / Medium / High / Critical</li>
+        </ul>
+      </div>
+
+      <!-- ROW 2: Intelligence & Scoring Pipeline -->
+            <div class="feature-block fb-teal">
+        <div class="feature-num">MODULE D</div>
+        <div class="feature-title">Industry-Based Activity &amp; Performance Filtering</div>
+        <div class="feature-body">Segment, benchmark, and evaluate account performance by industry classification — enabling institutions to identify sector-level risk concentrations and high-performing customer cohorts.</div>
+        <ul class="feature-list">
+          <li>Industry / sector tagging at account level</li>
+          <li>Cross-industry performance comparison dashboard</li>
+          <li>Sector-level transaction volume &amp; turnover benchmarking</li>
+          <li>Risk concentration analysis by industry segment</li>
+          <li>Cohort filtering: sector, account type, risk tier combinations</li>
+          <li>Industry-specific scoring weight configuration per institution</li>
+        </ul>
+      </div>
+          </div>
+        </div>
+        <div class="carousel-slide" data-slide="2">
+          <div class="slide-pair slide-pair--columns">
+            <div class="feature-block fb-teal">
+        <div class="feature-num">MODULE E</div>
+        <div class="feature-title">Credit Risk Scoring Engine</div>
+        <div class="feature-body">A configurable, rule-based credit scoring engine generating structured risk categories — enabling data-driven lending decisions across the full credit file spectrum.</div>
+        <ul class="feature-list">
+          <li>Rule-based scoring: transaction behaviour, income signals, turnover</li>
+          <li>Output: Risk Category (Low / Medium / High)</li>
+          <li>Institution-configurable scoring weights per customer segment</li>
+          <li>Score factor breakdown with per-decision audit trail</li>
+          <li>Score versioning for model governance &amp; regulatory review</li>
+          <li>Extensible architecture: ML model integration-ready</li>
+        </ul>
+      </div>
+            <div class="feature-block fb-gold">
+        <div class="feature-num fn-gold">MODULE F</div>
+        <div class="feature-title">Ecosystem-Wide Loan Performance &amp; BVN Scoring</div>
+        <div class="feature-body">The deepest intelligence layer in FinSyt. BVN-anchored cross-institution loan performance visibility — exposing multi-lender exposure, repayment history, and ecosystem risk invisible to single-institution views. <em class="standalone-note standalone-gold">Available as a standalone siloed product for lending portfolio intelligence.</em></div>
+        <ul class="feature-list fl-gold">
+          <li>BVN-anchored customer identity linkage across institutions</li>
+          <li>Cross-institution active loan exposure detection (stacking risk)</li>
+          <li>Repayment performance scoring: on-time, late, default history</li>
+          <li>Ecosystem-level borrower risk score output</li>
+          <li>NPL (Non-Performing Loan) early warning signal generation</li>
+          <li>Network effect: scoring accuracy improves as ecosystem grows</li>
+        </ul>
+      </div>
+
+      <!-- ROW 3: Fraud — Cross-cutting, spans full width -->
+          </div>
+        </div>
+        <div class="carousel-slide" data-slide="3">
+          <div class="slide-pair slide-pair--stack">
+            <div class="feature-block fb-fraud">
+        <div class="fraud-inner">
+          <div>
+            <div class="feature-num">MODULE G</div>
+            <div class="feature-title">Fraud Detection &amp; Identity Alert System</div>
+            <div class="feature-body" style="max-width:560px;">Real-time fraud signal detection using pre-defined identity and behavioural rules — with instant tiered alerts, a structured remediation workflow, and cross-module fraud signal correlation. <em class="standalone-note standalone-teal">Available as a standalone siloed product for dedicated fraud and identity intelligence.</em></div>
+          </div>
+          <ul class="feature-list fraud-list">
+            <li>Duplicate BVN &amp; National ID detection across all submissions</li>
+            <li>Synthetic identity &amp; suspicious data pattern flagging</li>
+            <li>Cross-module signal correlation: KYC + transaction + loan anomalies</li>
+            <li>Real-time admin alerts with Low / Medium / High / Critical tiering</li>
+            <li>Resolved vs. active alert queue with SLA tracking</li>
+            <li>Alert payload logging for regulatory &amp; legal evidence packages</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ROW 4: Command Centre — Full-width capstone -->
+            <div class="feature-block fb-command">
+        <div class="feature-num fn-command">MODULE H &middot; COMMAND CENTRE</div>
+        <div class="feature-title" style="font-size:1.5rem;">Interactive Admin Dashboard — Evaluation &amp; Monitoring</div>
+        <div class="feature-body">A unified, real-time command centre consolidating all seven intelligence modules into a single interactive administrative interface — built for decision-making speed, institutional oversight, and regulatory auditability. Institutions activating siloed modules receive a scoped dashboard view limited to their activated components.</div>
+        <div class="command-grid">
+          <ul class="feature-list">
+            <li>Live KYC submission queue with status pipeline</li>
+            <li>One-click approve / reject with full audit logging</li>
+            <li>Role-based access: admin, reviewer, risk analyst</li>
+            <li>Institution-level configuration &amp; API key management</li>
+          </ul>
+          <ul class="feature-list">
+            <li>Real-time anomaly &amp; fraud alert feed across all modules</li>
+            <li>Account-level drill-down: KYC + transactions + score + loans</li>
+            <li>Industry segment performance heatmap &amp; benchmarks</li>
+            <li>BVN ecosystem loan score per borrower record</li>
+          </ul>
+          <ul class="feature-list">
+            <li>Portfolio health: volume, turnover, NPL early warning rate</li>
+            <li>Exportable compliance &amp; risk audit reports</li>
+            <li>All PII encrypted at rest &amp; in transit (TLS)</li>
+            <li>NDPR-aligned &middot; CBN KYC guideline-ready</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- USERS -->
+<section id="users" style="background: rgba(17,34,64,0.3);">
+  <div class="container">
+    <div class="section-tag">User Architecture</div>
+    <h2 class="section-title">Two principals.<br>One seamless system.</h2>
+    <p class="section-lead">FinSyt operates across two distinct but tightly integrated user layers — the financial institution as the operator, and their end-customer as the applicant.</p>
+    <div class="users-grid fade-up">
+      <div class="user-card">
+        <div class="user-role role-institution">Institution User</div>
+        <div class="user-title">Banks, MFBs &amp; Lending Firms</div>
+        <div class="user-desc">The institutional operator configures, manages, and monitors the entire compliance workflow from a dedicated admin dashboard — with full control over KYC decisions, fraud alerts, and credit risk outputs.</div>
+        <ul class="user-capabilities">
+          <li><span class="cap-dot teal"></span>Interactive admin dashboard — all eight modules unified</li>
+          <li><span class="cap-dot teal"></span>KYC approve / reject with one-click workflow</li>
+          <li><span class="cap-dot teal"></span>Real-time account turnover &amp; transaction volume monitoring</li>
+          <li><span class="cap-dot teal"></span>Anomaly flag queue: overdrawn, unusual deposits, large withdrawals</li>
+          <li><span class="cap-dot teal"></span>Industry-segment performance filtering &amp; benchmarking</li>
+          <li><span class="cap-dot teal"></span>BVN-linked ecosystem loan score per borrower</li>
+          <li><span class="cap-dot teal"></span>Credit risk score review, override &amp; factor audit trail</li>
+          <li><span class="cap-dot teal"></span>Fraud &amp; identity alert queue with SLA tracking</li>
+          <li><span class="cap-dot teal"></span>Exportable compliance &amp; risk audit packages</li>
+        </ul>
+      </div>
+      <div class="user-card">
+        <div class="user-role role-customer">End Customer</div>
+        <div class="user-title">Account Applicants &amp; Borrowers</div>
+        <div class="user-desc">The end customer navigates a guided, mobile-optimised onboarding experience — submitting KYC documents, completing selfie video verification, and tracking their application status in real time.</div>
+        <ul class="user-capabilities">
+          <li><span class="cap-dot gold"></span>Guided account opening form flow</li>
+          <li><span class="cap-dot gold"></span>Document upload: NIN, BVN, Passport, Utility Bill</li>
+          <li><span class="cap-dot gold"></span>Selfie video capture for liveness verification</li>
+          <li><span class="cap-dot gold"></span>Real-time KYC application status tracking</li>
+          <li><span class="cap-dot gold"></span>Secure, encrypted document submission</li>
+          <li><span class="cap-dot gold"></span>Mobile-first experience — no branch visit required</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STACK -->
+<section id="stack">
+  <div class="container">
+    <div class="section-tag">Technology Stack</div>
+    <h2 class="section-title">Modern. Scalable.<br>Production-hardened.</h2>
+    <p class="section-lead">FinSyt is built on a battle-tested, cloud-native stack designed for performance, security, and the ability to scale from pilot institutions to enterprise deployments without architectural rebuilds.</p>
+    <div class="stack-grid fade-up">
+      <div class="stack-card">
+        <div class="stack-layer">Frontend</div>
+        <div class="stack-name">Next.js</div>
+        <div class="stack-sub">SSR · API Routes · Edge-ready</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Auth &amp; Database</div>
+        <div class="stack-name">Supabase</div>
+        <div class="stack-sub">Postgres · RLS · Auth · Storage</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Infrastructure</div>
+        <div class="stack-name">Hetzner VPS</div>
+        <div class="stack-sub">4 vCPU · 8 GB RAM · 20TB traffic</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">KYC &amp; Identity</div>
+        <div class="stack-name">Smile Identity</div>
+        <div class="stack-sub">Dojah · AWS Rekognition</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Payments</div>
+        <div class="stack-name">Paystack</div>
+        <div class="stack-sub">Nigerian-native · Transfers API</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Monitoring</div>
+        <div class="stack-name">Sentry</div>
+        <div class="stack-sub">Error tracking · Uptime Robot</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Analytics</div>
+        <div class="stack-name">PostHog</div>
+        <div class="stack-sub">Product analytics · Feature flags</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">CI / CD</div>
+        <div class="stack-name">GitHub Actions</div>
+        <div class="stack-sub">Automated deploy · Test gates</div>
+      </div>
+    </div>
+    <div class="stack-note fade-up">
+      All components are production-deployed and operational. The architecture is vendor-abstracted via adapter patterns — KYC providers can be swapped without application rewrites. Infrastructure scales to 500+ concurrent institutions on current specifications.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MARKET -->
+<section id="market" style="background: rgba(17,34,64,0.3);">
+  <div class="container">
+    <div class="section-tag">Market Opportunity</div>
+    <h2 class="section-title">A regulatory mandate in<br>a $2.1T economy.</h2>
+    <p class="section-lead">FinSyt targets a market driven not by discretionary software spend but by compliance obligation — making it structurally resistant to budget freezes and technology fatigue.</p>
+    <div class="market-grid fade-up">
+      <div class="market-stat">
+        <div class="market-val">923</div>
+        <div class="market-label">Licensed Financial Institutions</div>
+        <div class="market-desc">Banks, MFBs, and lending firms in Nigeria regulated by the CBN — all mandated to comply with KYC requirements</div>
+      </div>
+      <div class="market-stat">
+        <div class="market-val gold">$4.2B</div>
+        <div class="market-label">Annual Compliance Cost</div>
+        <div class="market-desc">Estimated annual spend by Nigerian financial institutions on KYC, AML, and fraud management processes</div>
+      </div>
+      <div class="market-stat">
+        <div class="market-val">60%+</div>
+        <div class="market-label">Underserved Credit Population</div>
+        <div class="market-desc">Nigerian adults lacking a formal credit file — the primary addressable market for FinSyt's credit scoring engine</div>
+      </div>
+    </div>
+    <div class="traction-list fade-up">
+      <div class="traction-item">
+        <div class="traction-icon">🎯</div>
+        <div class="traction-text">
+          <strong>Regulatory Mandate = Non-Optional Spend</strong>
+          CBN KYC requirements are non-negotiable for licensed institutions. FinSyt solves a compliance obligation, not a discretionary problem — compressing sales cycles from months to weeks.
+        </div>
+      </div>
+      <div class="traction-item">
+        <div class="traction-icon">🚀</div>
+        <div class="traction-text">
+          <strong>Pilot-First GTM Strategy</strong>
+          A structured pilot programme with qualifying institutions — at a time-limited Pilot Discount rate — converts to a full-tier subscription on completion. Pricing is value-based and disclosed through the engagement process.
+        </div>
+      </div>
+      <div class="traction-item">
+        <div class="traction-icon">🌍</div>
+        <div class="traction-text">
+          <strong>Expansion-Ready Architecture</strong>
+          Built for Nigeria, adaptable to Ghana, Kenya, and broader West Africa with localised document types and API integrations — no core rebuild required.
+        </div>
+      </div>
+      <div class="traction-item">
+        <div class="traction-icon">📊</div>
+        <div class="traction-text">
+          <strong>Measurable Outcomes from Day One</strong>
+          KYC completion rates, fraud alerts, account anomaly flags, BVN loan scores, and NPL early warnings are all tracked in real time — giving investors a rich, multi-dimensional signal set across the full platform.
+        </div>
+      </div>
+      <div class="traction-item">
+        <div class="traction-icon">🔗</div>
+        <div class="traction-text">
+          <strong>BVN Network Effect Flywheel</strong>
+          Each new institution joining FinSyt contributes anonymised loan performance data to the BVN scoring layer — making the entire network's credit intelligence more accurate. This is a compounding moat that deepens with every pilot conversion, creating lock-in through data value rather than switching friction.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DIFFERENTIATORS -->
+<section id="differentiation">
+  <div class="container">
+    <div class="section-tag">Competitive Differentiation</div>
+    <h2 class="section-title">Why FinSyt wins<br>in this market.</h2>
+    <p class="section-lead">The competitive moat is not just technical — it is contextual. FinSyt is the only production-deployed KYC+Credit+Fraud stack designed natively for African financial institution requirements.</p>
+    <div class="diff-grid fade-up">
+      <div class="diff-card">
+        <div class="diff-num">01</div>
+        <div class="diff-content">
+          <div class="diff-title">Africa-Native by Design</div>
+          <div class="diff-body">Supports Nigerian document types (BVN, NIN, Voter's Card), integrates with local identity APIs (Smile Identity, Dojah), and applies credit scoring logic tuned for thin-file and informal income customers. Global platforms cannot match this without multi-year localisation investments.</div>
+        </div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">02</div>
+        <div class="diff-content">
+          <div class="diff-title">Live &amp; Production-Deployed</div>
+          <div class="diff-body">FinSyt is not a roadmap or a prototype. It is operational today — with a production database, live KYC flows, and a deployed admin dashboard. Pilot institutions can begin onboarding customers within days of signing, not months.</div>
+        </div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">03</div>
+        <div class="diff-content">
+          <div class="diff-title">SMB-Accessible Pricing</div>
+          <div class="diff-body">Enterprise KYC platforms price at $50K–$500K+ annually — excluding the 800+ MFBs and mid-tier banks that represent FinSyt's primary market. FinSyt's tiered value-based model brings enterprise-grade financial intelligence within reach of institutions at every scale, with pricing structured around compliance ROI rather than build cost.</div>
+        </div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">04</div>
+        <div class="diff-content">
+          <div class="diff-title">Compliance Mandate Tailwind</div>
+          <div class="diff-body">Every licensed financial institution in Nigeria must comply with CBN KYC requirements. This is not a software sale — it is a compliance solution. Regulatory obligation creates urgency, compresses decision timelines, and insulates FinSyt against price sensitivity.</div>
+        </div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">05</div>
+        <div class="diff-content">
+          <div class="diff-title">Full-Lifecycle Intelligence</div>
+          <div class="diff-body">FinSyt covers the entire customer financial lifecycle — from KYC onboarding through transaction monitoring, behavioural anomaly detection, industry benchmarking, and BVN-linked ecosystem loan scoring. No other African platform delivers this breadth in a single deployed product.</div>
+        </div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">06</div>
+        <div class="diff-content">
+          <div class="diff-title">BVN as Ecosystem Intelligence Layer</div>
+          <div class="diff-body">FinSyt's BVN-anchored cross-institution scoring is a structural moat — not a feature. No single institution can see multi-lender exposure without it. As more institutions join the ecosystem, the scoring model becomes more accurate, creating a network-effect flywheel that compounds with every new participant.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SUCCESS METRICS -->
+<section id="metrics" style="background: rgba(17,34,64,0.3);">
+  <div class="container">
+    <div class="section-tag">Success Metrics</div>
+    <h2 class="section-title">What traction looks like.</h2>
+    <p class="section-lead">The following metrics are tracked in real time and will be surfaced in the investor dashboard ahead of and during the live demo. They constitute the primary signal set for commercial validation.</p>
+    <div class="stack-grid fade-up" style="grid-template-columns: repeat(3,1fr);">
+      <div class="stack-card" style="text-align:left;padding:24px;">
+        <div class="stack-layer" style="margin-bottom:12px;">Volume Signal</div>
+        <div class="stack-name" style="font-size:1.1rem;margin-bottom:6px;">KYC Applications Submitted</div>
+        <div class="stack-sub" style="line-height:1.5;">Total onboarding attempts across all pilot institutions — the primary demand signal.</div>
+      </div>
+      <div class="stack-card" style="text-align:left;padding:24px;">
+        <div class="stack-layer" style="margin-bottom:12px;">Quality Signal</div>
+        <div class="stack-name" style="font-size:1.1rem;margin-bottom:6px;">KYC Completion Rate %</div>
+        <div class="stack-sub" style="line-height:1.5;">Measures product quality and UX effectiveness. Target: above 75% completion across pilots.</div>
+      </div>
+      <div class="stack-card" style="text-align:left;padding:24px;">
+        <div class="stack-layer" style="margin-bottom:12px;">Value Signal</div>
+        <div class="stack-name" style="font-size:1.1rem;margin-bottom:6px;">Fraud Alerts Triggered</div>
+        <div class="stack-sub" style="line-height:1.5;">Tangible fraud events detected and resolved — the clearest proof of product ROI for institutions.</div>
+      </div>
+      <div class="stack-card" style="text-align:left;padding:24px;">
+        <div class="stack-layer" style="margin-bottom:12px;">Efficiency Signal</div>
+        <div class="stack-name" style="font-size:1.1rem;margin-bottom:6px;">Time-to-Onboard per Institution</div>
+        <div class="stack-sub" style="line-height:1.5;">Days from pilot sign-up to first live KYC submission. Measures sales and implementation velocity.</div>
+      </div>
+      <div class="stack-card" style="text-align:left;padding:24px;">
+        <div class="stack-layer" style="margin-bottom:12px;">Engagement Signal</div>
+        <div class="stack-name" style="font-size:1.1rem;margin-bottom:6px;">Weekly Active Institutions</div>
+        <div class="stack-sub" style="line-height:1.5;">Retention proxy — institutions actively processing KYC or reviewing fraud alerts within the week.</div>
+      </div>
+      <div class="stack-card" style="text-align:left;padding:24px;">
+        <div class="stack-layer" style="margin-bottom:12px;">Commercial Signal</div>
+        <div class="stack-name" style="font-size:1.1rem;margin-bottom:6px;">MRR + Pipeline Value</div>
+        <div class="stack-sub" style="line-height:1.5;">Monthly recurring revenue from converted pilots plus qualified pipeline in active negotiation.</div>
+      </div>
+      <div class="stack-card" style="text-align:left;padding:24px;">
+        <div class="stack-layer" style="margin-bottom:12px;">Anomaly Signal</div>
+        <div class="stack-name" style="font-size:1.1rem;margin-bottom:6px;">Accounts Flagged &amp; Resolved</div>
+        <div class="stack-sub" style="line-height:1.5;">Total anomalous account events detected (overdrawn, unusual deposits, large withdrawals) and the resolution rate as a product efficacy measure.</div>
+      </div>
+      <div class="stack-card" style="text-align:left;padding:24px;">
+        <div class="stack-layer" style="margin-bottom:12px;">Ecosystem Signal</div>
+        <div class="stack-name" style="font-size:1.1rem;margin-bottom:6px;">BVN Loan Scores Generated</div>
+        <div class="stack-sub" style="line-height:1.5;">Total cross-institution borrower scores produced via BVN linkage — the clearest measure of the ecosystem intelligence layer's activation and network depth.</div>
+      </div>
+      <div class="stack-card" style="text-align:left;padding:24px;">
+        <div class="stack-layer" style="margin-bottom:12px;">Portfolio Signal</div>
+        <div class="stack-name" style="font-size:1.1rem;margin-bottom:6px;">NPL Early Warning Rate</div>
+        <div class="stack-sub" style="line-height:1.5;">Percentage of non-performing loans flagged by FinSyt's scoring engine before formal default classification — the direct ROI metric for lending institutions.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING MODEL -->
+<section id="pricing" style="background: rgba(17,34,64,0.3);">
+  <div class="container">
+    <div class="section-tag">Pricing Model</div>
+    <h2 class="section-title">Value-based. Tiered.<br>Right-sized for every institution.</h2>
+    <p class="section-lead">FinSyt is priced on a tiered value-based model — anchored to the cost of compliance failure and fraud loss, not to build cost. Institutions enter through a structured Pilot Discount and graduate to a full-tier subscription aligned to their scale and activated modules.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:2rem;" class="fade-up">
+
+      <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--border-radius-lg);padding:1.8rem 1.4rem;backdrop-filter:blur(8px);position:relative;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Tier 1</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--white);margin-bottom:6px;">Essential</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.5;">Microfinance Banks &amp; smaller lending institutions activating 1–3 core modules</div>
+        <div style="height:1px;background:var(--border);margin-bottom:16px;"></div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li style="font-size:12px;color:var(--text);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">+</span>Digital Onboarding &amp; KYC</li>
+          <li style="font-size:12px;color:var(--text);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">+</span>Fraud Detection &amp; Alerts</li>
+          <li style="font-size:12px;color:var(--text);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">+</span>Basic Admin Dashboard</li>
+          <li style="font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">–</span>Transaction Monitoring</li>
+          <li style="font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">–</span>BVN Ecosystem Scoring</li>
+        </ul>
+        <div style="margin-top:20px;padding:10px 14px;background:rgba(0,201,167,0.06);border-radius:8px;border:1px solid rgba(0,201,167,0.15);font-size:11px;color:var(--teal);text-align:center;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;">Pricing disclosed on engagement</div>
+      </div>
+
+      <div style="background:var(--card-bg);border:2px solid rgba(0,201,167,0.4);border-radius:var(--border-radius-lg);padding:1.8rem 1.4rem;backdrop-filter:blur(8px);position:relative;">
+        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--teal);color:var(--navy);font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:4px 14px;border-radius:99px;white-space:nowrap;">Most Selected</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Tier 2</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--white);margin-bottom:6px;">Professional</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.5;">Commercial banks &amp; mid-tier MFBs activating the full compliance + analytics stack</div>
+        <div style="height:1px;background:var(--border);margin-bottom:16px;"></div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li style="font-size:12px;color:var(--text);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">+</span>All Tier 1 modules</li>
+          <li style="font-size:12px;color:var(--text);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">+</span>Transaction Monitoring &amp; Turnover</li>
+          <li style="font-size:12px;color:var(--text);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">+</span>Anomalous Activity Flagging</li>
+          <li style="font-size:12px;color:var(--text);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">+</span>Industry Performance Filtering</li>
+          <li style="font-size:12px;color:var(--text);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">+</span>Credit Risk Scoring Engine</li>
+          <li style="font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">–</span>BVN Ecosystem Scoring</li>
+        </ul>
+        <div style="margin-top:20px;padding:10px 14px;background:rgba(0,201,167,0.08);border-radius:8px;border:1px solid rgba(0,201,167,0.25);font-size:11px;color:var(--teal);text-align:center;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;">Pricing disclosed on engagement</div>
+      </div>
+
+      <div style="background:var(--card-bg);border:1px solid rgba(244,185,66,0.3);border-radius:var(--border-radius-lg);padding:1.8rem 1.4rem;backdrop-filter:blur(8px);position:relative;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Tier 3</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--white);margin-bottom:6px;">Enterprise</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.5;">Large banks &amp; lending groups requiring the full eight-module stack including BVN ecosystem intelligence</div>
+        <div style="height:1px;background:var(--border);margin-bottom:16px;"></div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li style="font-size:12px;color:var(--text);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">+</span>All Tier 2 modules</li>
+          <li style="font-size:12px;color:var(--text);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">+</span>BVN Ecosystem Loan Scoring</li>
+          <li style="font-size:12px;color:var(--text);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">+</span>NPL Early Warning System</li>
+          <li style="font-size:12px;color:var(--text);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">+</span>Full Interactive Admin Dashboard</li>
+          <li style="font-size:12px;color:var(--text);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">+</span>Cross-module fraud correlation</li>
+          <li style="font-size:12px;color:var(--text);display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:11px;flex-shrink:0;">+</span>Dedicated implementation support</li>
+        </ul>
+        <div style="margin-top:20px;padding:10px 14px;background:rgba(244,185,66,0.06);border-radius:8px;border:1px solid rgba(244,185,66,0.2);font-size:11px;color:var(--gold);text-align:center;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;">Pricing disclosed on engagement</div>
+      </div>
+
+    </div>
+
+    <div style="background:rgba(244,185,66,0.05);border:1px solid rgba(244,185,66,0.2);border-radius:var(--border-radius-lg);padding:1.2rem 1.5rem;display:flex;align-items:flex-start;gap:16px;" class="fade-up">
+      <div style="flex-shrink:0;width:40px;height:40px;background:rgba(244,185,66,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;">&#9734;</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;color:var(--white);margin-bottom:4px;">Pilot Discount Programme &nbsp;&middot;&nbsp; <span style="color:var(--gold);">All Tiers</span></div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;">Qualifying institutions enter at a structured Pilot Discount rate — a meaningful reduction from full-tier pricing — for an agreed pilot period. This is a paid engagement, not a free trial. Pilot pricing reflects the mutual investment in configuration, onboarding, and institutional calibration. Full-tier rates apply on graduation. Pricing details are shared during the commercial engagement process.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;background:rgba(0,201,167,0.04);border:1px solid rgba(0,201,167,0.15);border-radius:var(--border-radius-lg);padding:1.2rem 1.5rem;display:flex;align-items:flex-start;gap:16px;" class="fade-up">
+      <div style="flex-shrink:0;width:40px;height:40px;background:rgba(0,201,167,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;">&#10070;</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;color:var(--white);margin-bottom:4px;">Modular &amp; Siloed Deployment &nbsp;&middot;&nbsp; <span style="color:var(--teal);">All Tiers</span></div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;">Each component of the KYC, transaction monitoring, fraud intelligence, and ecosystem scoring stack can be deployed as a <strong style="color:var(--white);">standalone siloed product</strong> for institutions with specific use cases. An MFB that only needs KYC &amp; fraud detection need not activate transaction analytics or BVN scoring. A lending institution focused solely on loan performance monitoring can deploy Module F independently. Institutions pay for what they activate, at the tier that fits their scale.</div>
+      </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls row -->
+      <div class="carousel-controls">
+        <button class="carousel-arrow" id="prevBtn" aria-label="Previous">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M12 5l-5 5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="carousel-dots">
+          <button class="carousel-dot active" data-target="0" aria-label="A–B · Onboarding & Monitoring"><span class="dot-inner"></span><span class="dot-label">A–B</span></button>
+          <button class="carousel-dot" data-target="1" aria-label="C–D · Anomalies & Industry"><span class="dot-inner"></span><span class="dot-label">C–D</span></button>
+          <button class="carousel-dot" data-target="2" aria-label="E–F · Credit & Ecosystem"><span class="dot-inner"></span><span class="dot-label">E–F</span></button>
+          <button class="carousel-dot" data-target="3" aria-label="G–H · Fraud & Command Centre"><span class="dot-inner"></span><span class="dot-label">G–H</span></button>
+          
+        </div>
+
+        <button class="carousel-arrow" id="nextBtn" aria-label="Next">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M8 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="carousel-progress">
+        <div class="carousel-progress-bar" id="progressBar"></div>
+      </div>
+
+      <!-- Slide counter -->
+      <div class="carousel-counter">
+        <span id="slideNum">1</span> <span class="counter-sep">/</span> 4
+      </div>
+
+    </div>
+
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- NEXT STEPS -->
+<section id="nextsteps">
+  <div class="container">
+    <div class="section-tag">Next Steps</div>
+    <h2 class="section-title">From this brief<br>to live demo in days.</h2>
+    <p class="section-lead">FinSyt is ready to demonstrate today. The following is the engagement path for prospective investors and partner institutions from first contact through pilot agreement.</p>
+    <div class="steps-track fade-up">
+      <div class="step-item">
+        <div class="step-dot"></div>
+        <div class="step-content">
+          <div class="step-label">Step 01</div>
+          <div class="step-title">Review this Solution Brief</div>
+          <div class="step-body">Digest the platform overview, feature set, market context, and differentiators. Prepare questions for the live demonstration session.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot"></div>
+        <div class="step-content">
+          <div class="step-label">Step 02</div>
+          <div class="step-title">Schedule Live Demo</div>
+          <div class="step-body"><a href="https://link.1prompt.com/widget/bookings/gtm" target="_blank" rel="noopener noreferrer" style="color:var(--teal);text-decoration:none;border-bottom:1px solid rgba(0,201,167,0.3);">Schedule your live demo here →</a> A 60-minute guided walkthrough of the live production environment — covering both the institution admin dashboard and the end-customer KYC flow, with real data processing.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot"></div>
+        <div class="step-content">
+          <div class="step-label">Step 03 · Institutions</div>
+          <div class="step-title">Enter Pilot Programme</div>
+          <div class="step-body">A structured Pilot Programme for qualifying financial institutions, entered at a time-limited Pilot Discount rate. FinSyt configures a dedicated environment, onboards your admin team, and activates relevant modules. Full-tier pricing applies post-pilot. Pricing details shared during the engagement process.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot"></div>
+        <div class="step-content">
+          <div class="step-label">Step 03 · Investors</div>
+          <div class="step-title">Review Investment Memorandum</div>
+          <div class="step-body">Detailed financial projections, cap table structure, use-of-funds breakdown, and 18-month growth roadmap available under NDA to qualifying angel investors and early-stage funds.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot"></div>
+        <div class="step-content">
+          <div class="step-label">Step 04</div>
+          <div class="step-title">Execute Pilot or Partnership Agreement</div>
+          <div class="step-body">Sign the Pilot Services Agreement (institutions) or Term Sheet (investors). Kickoff within 5 business days of agreement execution. Access to live metrics dashboard provided immediately.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo-row">
+    <img src="data:image/png;base64,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" alt="Valtara AI" style="width:56px;height:56px;border-radius:50%;object-fit:cover;margin:0 auto 12px;">
+    <div class="footer-brand">Fin<span>Syt</span></div>
+    <div class="footer-byline">Exclusively designed, built &amp; owned by <strong>Valtara | AI</strong></div>
+  </div>
+  <div class="footer-tagline">Digital Onboarding · KYC · Transaction Monitoring · Anomaly Detection · Industry Analytics · BVN Ecosystem Loan Scoring · Fraud Intelligence</div>
+  <div class="footer-contact">
+    <div class="contact-item">
+      <strong>Platform Status</strong>
+      <span class="live-badge" style="font-size:12px;margin:0 auto;">Live &amp; Deployed</span>
+    </div>
+    <div class="contact-item">
+      <strong>Built by</strong>
+      Valtara AI
+    </div>
+    <div class="contact-item">
+      <strong>Project Reference</strong>
+      FINSYT-2026-001
+    </div>
+    <div class="contact-item">
+      <strong>Contact</strong>
+      fo@valtara.ai
+    </div>
+    <div class="contact-item">
+      <strong>Demo Requests</strong>
+      <a href="https://link.1prompt.com/widget/bookings/gtm" target="_blank" rel="noopener noreferrer" style="color:var(--teal);text-decoration:none;">Book a Live Demo →</a>
+    </div>
+  </div>
+  <div class="footer-legal">
+    &#169; 2025 Valtara | AI &nbsp;·&nbsp; FinSyt — Financial Intelligence Platform — is exclusively designed, built, and owned by Valtara AI &nbsp;·&nbsp; All rights reserved &nbsp;·&nbsp; This solution brief is confidential and prepared for qualified investors and prospective partner institutions. Valid 60 days from issue. &nbsp;·&nbsp; www.valtara.ai
+  </div>
+</footer>
+
+<script>
+// Intersection Observer for fade-up animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Active nav link on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+
+<script>
+(function() {
+  const SLIDE_DURATION = 12000; // 12 seconds per slide — enough to read both cards
+  const TOTAL_SLIDES = 4;
+
+  const track    = document.getElementById('carouselTrack');
+  const prevBtn  = document.getElementById('prevBtn');
+  const nextBtn  = document.getElementById('nextBtn');
+  const dots     = document.querySelectorAll('.carousel-dot');
+  const bar      = document.getElementById('progressBar');
+  const slideNum = document.getElementById('slideNum');
+
+  let current   = 0;
+  let timer     = null;
+  let barTimer  = null;
+  let paused    = false;
+
+  function goTo(idx, animate) {
+    // Clear timers
+    clearInterval(timer);
+    clearTimeout(barTimer);
+    if (animate === undefined) animate = true;
+
+    // Clamp
+    idx = ((idx % TOTAL_SLIDES) + TOTAL_SLIDES) % TOTAL_SLIDES;
+    current = idx;
+
+    // Move track
+    track.style.transition = animate ? 'transform 0.7s cubic-bezier(0.4,0,0.2,1)' : 'none';
+    track.style.transform = 'translateX(-' + (current * 100) + '%)';
+
+    // Trigger card entrance animation
+    const slides = document.querySelectorAll('.carousel-slide');
+    slides.forEach((s, i) => {
+      s.classList.remove('entering');
+      if (i === current) {
+        void s.offsetWidth; // reflow
+        s.classList.add('entering');
+      }
+    });
+
+    // Update dots
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+
+    // Update counter
+    slideNum.textContent = current + 1;
+
+    // Update arrows
+    prevBtn.disabled = false;
+    nextBtn.disabled = false;
+
+    // Start progress bar
+    bar.style.transition = 'none';
+    bar.style.width = '0%';
+    void bar.offsetWidth;
+    bar.style.transition = 'width ' + SLIDE_DURATION + 'ms linear';
+    bar.style.width = '100%';
+
+    // Auto-advance
+    if (!paused) {
+      timer = setTimeout(function() { goTo(current + 1); }, SLIDE_DURATION);
+    }
+  }
+
+  // Arrow controls
+  nextBtn.addEventListener('click', function() { goTo(current + 1); });
+  prevBtn.addEventListener('click', function() { goTo(current - 1); });
+
+  // Dot controls
+  dots.forEach(function(d, i) {
+    d.addEventListener('click', function() { goTo(i); });
+  });
+
+  // Pause on hover
+  const carousel = document.getElementById('modulesCarousel');
+  carousel.addEventListener('mouseenter', function() {
+    paused = true;
+    clearTimeout(timer);
+    bar.style.animationPlayState = 'paused';
+    // Freeze progress bar width visually
+    const computed = getComputedStyle(bar).width;
+    const parent   = getComputedStyle(bar.parentElement).width;
+    bar.style.transition = 'none';
+    bar.style.width = (parseFloat(computed) / parseFloat(parent) * 100) + '%';
+  });
+
+  carousel.addEventListener('mouseleave', function() {
+    paused = false;
+    // Restart from current position — go to next after full duration
+    bar.style.transition = 'none';
+    bar.style.width = '0%';
+    void bar.offsetWidth;
+    bar.style.transition = 'width ' + SLIDE_DURATION + 'ms linear';
+    bar.style.width = '100%';
+    timer = setTimeout(function() { goTo(current + 1); }, SLIDE_DURATION);
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight') goTo(current + 1);
+    if (e.key === 'ArrowLeft')  goTo(current - 1);
+  });
+
+  // Init
+  goTo(0, false);
+})();
+</script>
+
+</body>
+</html>
