@@ -1,0 +1,2 @@
+# finsyt
+Financial Intelligence Software
