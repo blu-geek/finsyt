@@ -1168,171 +1168,38 @@ footer {
 }
 
 /* ── MODULES CAROUSEL ─────────────────────────────────────── */
-.modules-carousel {
-  position: relative;
-  overflow: hidden;
-}
-
-.carousel-track {
-  display: flex;
-  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
-}
-
-.carousel-slide {
-  min-width: 100%;
-  padding: 4px 2px 20px;
-}
-
-.slide-pair--columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.slide-pair--stack {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* ── Dot navigation ── */
-.carousel-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 28px;
-}
-
-.carousel-dots {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.carousel-dot {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px 6px;
-  transition: all .2s;
-}
-
-.dot-inner {
-  display: block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(0,201,167,0.25);
-  transition: all .3s;
-}
-
-.carousel-dot.active .dot-inner,
-.carousel-dot:hover .dot-inner {
-  background: var(--teal);
-  transform: scale(1.35);
-}
-
-.dot-label {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 9px;
-  color: var(--muted);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  transition: color .2s;
-}
-
-.carousel-dot.active .dot-label {
-  color: var(--teal);
-}
-
-/* ── Arrow buttons ── */
-.carousel-arrow {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all .2s;
-  flex-shrink: 0;
-}
-
-.carousel-arrow:hover {
-  border-color: var(--teal);
-  color: var(--teal);
-  transform: scale(1.08);
-}
-
-.carousel-arrow:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* ── Progress bar ── */
-.carousel-progress {
-  height: 2px;
-  background: rgba(0,201,167,0.1);
-  border-radius: 1px;
-  margin-top: 16px;
-  overflow: hidden;
-}
-
-.carousel-progress-bar {
-  height: 100%;
-  background: var(--teal);
-  border-radius: 1px;
-  width: 0%;
-  transition: width linear;
-}
-
-/* ── Counter ── */
-.carousel-counter {
-  text-align: center;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 10px;
-  letter-spacing: 0.08em;
-}
-
+.modules-carousel { position: relative; overflow: hidden; }
+.carousel-track { display: flex; transition: transform 0.7s cubic-bezier(0.4,0,0.2,1); will-change: transform; }
+.carousel-slide { min-width: 100%; padding: 4px 2px 20px; }
+.slide-pair--columns { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.slide-pair--stack   { display: flex; flex-direction: column; gap: 16px; }
+.carousel-controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 28px; }
+.carousel-dots { display: flex; gap: 8px; align-items: center; }
+.carousel-dot { display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px 6px; transition: all .2s; }
+.dot-inner { display: block; width: 8px; height: 8px; border-radius: 50%; background: rgba(0,201,167,0.25); transition: all .3s; }
+.carousel-dot.active .dot-inner, .carousel-dot:hover .dot-inner { background: var(--teal); transform: scale(1.35); }
+.dot-label { font-family: "JetBrains Mono", monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; transition: color .2s; }
+.carousel-dot.active .dot-label { color: var(--teal); }
+.carousel-arrow { width: 36px; height: 36px; border-radius: 50%; background: var(--card-bg); border: 1px solid var(--border); color: var(--muted); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .2s; flex-shrink: 0; }
+.carousel-arrow:hover { border-color: var(--teal); color: var(--teal); transform: scale(1.08); }
+.carousel-arrow:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+.carousel-progress { height: 2px; background: rgba(0,201,167,0.1); border-radius: 1px; margin-top: 16px; overflow: hidden; }
+.carousel-progress-bar { height: 100%; background: var(--teal); border-radius: 1px; width: 0%; transition: width linear; }
+.carousel-counter { text-align: center; font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--muted); margin-top: 10px; letter-spacing: 0.08em; }
 .counter-sep { opacity: 0.4; margin: 0 3px; }
-
-/* ── Slide entrance animation ── */
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
+@keyframes slideIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 .carousel-slide.entering .fb-teal,
 .carousel-slide.entering .fb-gold,
 .carousel-slide.entering .fb-fraud,
-.carousel-slide.entering .fb-command {
-  animation: slideIn 0.5s ease both;
-}
-
+.carousel-slide.entering .fb-command { animation: slideIn 0.5s ease both; }
 .carousel-slide.entering .slide-pair--columns > *:nth-child(2),
-.carousel-slide.entering .slide-pair--stack > *:nth-child(2) {
-  animation-delay: 0.12s;
-}
-
-/* ── Responsive ── */
+.carousel-slide.entering .slide-pair--stack > *:nth-child(2) { animation-delay: 0.12s; }
 @media (max-width: 900px) {
   .slide-pair--columns { grid-template-columns: 1fr; }
   .dot-label { display: none; }
   .carousel-controls { gap: 10px; }
 }
+
 </style>
 </head>
 <body>
@@ -1528,151 +1395,177 @@ footer {
     <h2 class="section-title">Eight modules. One platform.<br>Zero blind spots.</h2>
     <p class="section-lead">FinSyt delivers a unified, eight-module financial intelligence stack — from first customer touch through real-time transaction monitoring, behavioural anomaly detection, industry benchmarking, and ecosystem-wide loan performance scoring via BVN. Each module is equally deployable as a standalone siloed product for institutions with specific use-case requirements. Browse all eight modules below — use the navigation or wait for auto-advance.</p>
 
-    <!-- MODULES CAROUSEL -->
     <div class="modules-carousel fade-up" id="modulesCarousel">
 
-      <!-- Slide track -->
       <div class="carousel-track" id="carouselTrack">
-        
+
         <div class="carousel-slide" data-slide="0">
           <div class="slide-pair slide-pair--columns">
             <div class="feature-block fb-teal">
-        <div class="feature-num">MODULE A</div>
-        <div class="feature-title">Digital Onboarding &amp; KYC</div>
-        <div class="feature-body">End-to-end customer onboarding with document capture, selfie video verification, and real-time status tracking — eliminating branch visits entirely. <em class="standalone-note standalone-teal">Available as a standalone siloed product for institutions requiring only digital KYC capability.</em></div>
-        <ul class="feature-list">
-          <li>User registration &amp; Supabase Auth login</li>
-          <li>Document upload: NIN, Passport, BVN, Voter's Card, Utility Bill</li>
-          <li>Selfie video capture with liveness detection</li>
-          <li>Real-time KYC submission status tracking</li>
-          <li>Secure audit trail for all submissions</li>
-          <li>API-driven verification via Smile Identity / Dojah</li>
-        </ul>
-      </div>
+              <div class="feature-num">MODULE A</div>
+              <div class="feature-title">Digital Onboarding &amp; KYC</div>
+              <div class="feature-body">End-to-end customer onboarding with document capture, selfie video verification, and real-time status tracking — eliminating branch visits entirely. <em class="standalone-note standalone-teal">Available as a standalone siloed product for institutions requiring only digital KYC capability.</em></div>
+              <ul class="feature-list">
+                <li>User registration &amp; Supabase Auth login</li>
+                <li>Document upload: NIN, Passport, BVN, Voter’s Card, Utility Bill</li>
+                <li>Selfie video capture with liveness detection</li>
+                <li>Real-time KYC submission status tracking</li>
+                <li>Secure audit trail for all submissions</li>
+                <li>API-driven verification via Smile Identity / Dojah</li>
+              </ul>
+            </div>
             <div class="feature-block fb-teal">
-        <div class="feature-num">MODULE B</div>
-        <div class="feature-title">Transaction Monitoring &amp; Account Turnover</div>
-        <div class="feature-body">Continuous tracking of account-level transaction activity — giving institutions a real-time view of financial health, volume trends, and turnover patterns per customer and across the portfolio.</div>
-        <ul class="feature-list">
-          <li>Account turnover analysis: inflow vs outflow over rolling periods</li>
-          <li>Transaction volume tracking: daily, weekly, monthly aggregates</li>
-          <li>Balance trend visualisation per account</li>
-          <li>Period-over-period comparison for performance review</li>
-          <li>Drill-down from portfolio view to individual account level</li>
-          <li>Exportable transaction summaries for audit &amp; compliance</li>
-        </ul>
-      </div>
+              <div class="feature-num">MODULE B</div>
+              <div class="feature-title">Transaction Monitoring &amp; Account Turnover</div>
+              <div class="feature-body">Continuous tracking of account-level transaction activity — giving institutions a real-time view of financial health, volume trends, and turnover patterns per customer and across the portfolio.</div>
+              <ul class="feature-list">
+                <li>Account turnover analysis: inflow vs outflow over rolling periods</li>
+                <li>Transaction volume tracking: daily, weekly, monthly aggregates</li>
+                <li>Balance trend visualisation per account</li>
+                <li>Period-over-period comparison for performance review</li>
+                <li>Drill-down from portfolio view to individual account level</li>
+                <li>Exportable transaction summaries for audit &amp; compliance</li>
+              </ul>
+            </div>
           </div>
         </div>
+
         <div class="carousel-slide" data-slide="1">
           <div class="slide-pair slide-pair--columns">
             <div class="feature-block fb-gold">
-        <div class="feature-num fn-gold">MODULE C</div>
-        <div class="feature-title">Anomalous Account Activity Flagging</div>
-        <div class="feature-body">Automated, rule-driven detection of account behaviours that deviate from established norms — surfacing risk signals before they become losses, with instant tiered administrator alerts. <em class="standalone-note standalone-gold">Available as a standalone siloed product for post-onboarding account surveillance.</em></div>
-        <ul class="feature-list fl-gold">
-          <li>Overdrawn account status detection &amp; immediate alert</li>
-          <li>Unusual deposit pattern flagging: velocity, source, size anomalies</li>
-          <li>Large withdrawal anomaly detection (institution-configurable threshold)</li>
-          <li>Dormant-to-active account reactivation flags</li>
-          <li>Rapid successive transaction sequencing alerts</li>
-          <li>Severity classification: Low / Medium / High / Critical</li>
-        </ul>
-      </div>
-
-      <!-- ROW 2: Intelligence & Scoring Pipeline -->
+              <div class="feature-num fn-gold">MODULE C</div>
+              <div class="feature-title">Anomalous Account Activity Flagging</div>
+              <div class="feature-body">Automated, rule-driven detection of account behaviours that deviate from established norms — surfacing risk signals before they become losses, with instant tiered administrator alerts. <em class="standalone-note standalone-gold">Available as a standalone siloed product for post-onboarding account surveillance.</em></div>
+              <ul class="feature-list fl-gold">
+                <li>Overdrawn account status detection &amp; immediate alert</li>
+                <li>Unusual deposit pattern flagging: velocity, source, size anomalies</li>
+                <li>Large withdrawal anomaly detection (institution-configurable threshold)</li>
+                <li>Dormant-to-active account reactivation flags</li>
+                <li>Rapid successive transaction sequencing alerts</li>
+                <li>Severity classification: Low / Medium / High / Critical</li>
+              </ul>
+            </div>
             <div class="feature-block fb-teal">
-        <div class="feature-num">MODULE D</div>
-        <div class="feature-title">Industry-Based Activity &amp; Performance Filtering</div>
-        <div class="feature-body">Segment, benchmark, and evaluate account performance by industry classification — enabling institutions to identify sector-level risk concentrations and high-performing customer cohorts.</div>
-        <ul class="feature-list">
-          <li>Industry / sector tagging at account level</li>
-          <li>Cross-industry performance comparison dashboard</li>
-          <li>Sector-level transaction volume &amp; turnover benchmarking</li>
-          <li>Risk concentration analysis by industry segment</li>
-          <li>Cohort filtering: sector, account type, risk tier combinations</li>
-          <li>Industry-specific scoring weight configuration per institution</li>
-        </ul>
-      </div>
+              <div class="feature-num">MODULE D</div>
+              <div class="feature-title">Industry-Based Activity &amp; Performance Filtering</div>
+              <div class="feature-body">Segment, benchmark, and evaluate account performance by industry classification — enabling institutions to identify sector-level risk concentrations and high-performing customer cohorts.</div>
+              <ul class="feature-list">
+                <li>Industry / sector tagging at account level</li>
+                <li>Cross-industry performance comparison dashboard</li>
+                <li>Sector-level transaction volume &amp; turnover benchmarking</li>
+                <li>Risk concentration analysis by industry segment</li>
+                <li>Cohort filtering: sector, account type, risk tier combinations</li>
+                <li>Industry-specific scoring weight configuration per institution</li>
+              </ul>
+            </div>
           </div>
         </div>
+
         <div class="carousel-slide" data-slide="2">
           <div class="slide-pair slide-pair--columns">
             <div class="feature-block fb-teal">
-        <div class="feature-num">MODULE E</div>
-        <div class="feature-title">Credit Risk Scoring Engine</div>
-        <div class="feature-body">A configurable, rule-based credit scoring engine generating structured risk categories — enabling data-driven lending decisions across the full credit file spectrum.</div>
-        <ul class="feature-list">
-          <li>Rule-based scoring: transaction behaviour, income signals, turnover</li>
-          <li>Output: Risk Category (Low / Medium / High)</li>
-          <li>Institution-configurable scoring weights per customer segment</li>
-          <li>Score factor breakdown with per-decision audit trail</li>
-          <li>Score versioning for model governance &amp; regulatory review</li>
-          <li>Extensible architecture: ML model integration-ready</li>
-        </ul>
-      </div>
+              <div class="feature-num">MODULE E</div>
+              <div class="feature-title">Credit Risk Scoring Engine</div>
+              <div class="feature-body">A configurable, rule-based credit scoring engine generating structured risk categories — enabling data-driven lending decisions across the full credit file spectrum.</div>
+              <ul class="feature-list">
+                <li>Rule-based scoring: transaction behaviour, income signals, turnover</li>
+                <li>Output: Risk Category (Low / Medium / High)</li>
+                <li>Institution-configurable scoring weights per customer segment</li>
+                <li>Score factor breakdown with per-decision audit trail</li>
+                <li>Score versioning for model governance &amp; regulatory review</li>
+                <li>Extensible architecture: ML model integration-ready</li>
+              </ul>
+            </div>
             <div class="feature-block fb-gold">
-        <div class="feature-num fn-gold">MODULE F</div>
-        <div class="feature-title">Ecosystem-Wide Loan Performance &amp; BVN Scoring</div>
-        <div class="feature-body">The deepest intelligence layer in FinSyt. BVN-anchored cross-institution loan performance visibility — exposing multi-lender exposure, repayment history, and ecosystem risk invisible to single-institution views. <em class="standalone-note standalone-gold">Available as a standalone siloed product for lending portfolio intelligence.</em></div>
-        <ul class="feature-list fl-gold">
-          <li>BVN-anchored customer identity linkage across institutions</li>
-          <li>Cross-institution active loan exposure detection (stacking risk)</li>
-          <li>Repayment performance scoring: on-time, late, default history</li>
-          <li>Ecosystem-level borrower risk score output</li>
-          <li>NPL (Non-Performing Loan) early warning signal generation</li>
-          <li>Network effect: scoring accuracy improves as ecosystem grows</li>
-        </ul>
-      </div>
-
-      <!-- ROW 3: Fraud — Cross-cutting, spans full width -->
+              <div class="feature-num fn-gold">MODULE F</div>
+              <div class="feature-title">Ecosystem-Wide Loan Performance &amp; BVN Scoring</div>
+              <div class="feature-body">The deepest intelligence layer in FinSyt. BVN-anchored cross-institution loan performance visibility — exposing multi-lender exposure, repayment history, and ecosystem risk invisible to single-institution views. <em class="standalone-note standalone-gold">Available as a standalone siloed product for lending portfolio intelligence.</em></div>
+              <ul class="feature-list fl-gold">
+                <li>BVN-anchored customer identity linkage across institutions</li>
+                <li>Cross-institution active loan exposure detection (stacking risk)</li>
+                <li>Repayment performance scoring: on-time, late, default history</li>
+                <li>Ecosystem-level borrower risk score output</li>
+                <li>NPL (Non-Performing Loan) early warning signal generation</li>
+                <li>Network effect: scoring accuracy improves as ecosystem grows</li>
+              </ul>
+            </div>
           </div>
         </div>
+
         <div class="carousel-slide" data-slide="3">
           <div class="slide-pair slide-pair--stack">
             <div class="feature-block fb-fraud">
-        <div class="fraud-inner">
-          <div>
-            <div class="feature-num">MODULE G</div>
-            <div class="feature-title">Fraud Detection &amp; Identity Alert System</div>
-            <div class="feature-body" style="max-width:560px;">Real-time fraud signal detection using pre-defined identity and behavioural rules — with instant tiered alerts, a structured remediation workflow, and cross-module fraud signal correlation. <em class="standalone-note standalone-teal">Available as a standalone siloed product for dedicated fraud and identity intelligence.</em></div>
+              <div class="fraud-inner">
+                <div>
+                  <div class="feature-num">MODULE G</div>
+                  <div class="feature-title">Fraud Detection &amp; Identity Alert System</div>
+                  <div class="feature-body" style="max-width:560px;">Real-time fraud signal detection using pre-defined identity and behavioural rules — with instant tiered alerts, a structured remediation workflow, and cross-module fraud signal correlation. <em class="standalone-note standalone-teal">Available as a standalone siloed product for dedicated fraud and identity intelligence.</em></div>
+                </div>
+                <ul class="feature-list fraud-list">
+                  <li>Duplicate BVN &amp; National ID detection across all submissions</li>
+                  <li>Synthetic identity &amp; suspicious data pattern flagging</li>
+                  <li>Cross-module signal correlation: KYC + transaction + loan anomalies</li>
+                  <li>Real-time admin alerts with Low / Medium / High / Critical tiering</li>
+                  <li>Resolved vs. active alert queue with SLA tracking</li>
+                  <li>Alert payload logging for regulatory &amp; legal evidence packages</li>
+                </ul>
+              </div>
+            </div>
+            <div class="feature-block fb-command">
+              <div class="feature-num fn-command">MODULE H &middot; COMMAND CENTRE</div>
+              <div class="feature-title" style="font-size:1.5rem;">Interactive Admin Dashboard — Evaluation &amp; Monitoring</div>
+              <div class="feature-body">A unified, real-time command centre consolidating all seven intelligence modules into a single interactive administrative interface — built for decision-making speed, institutional oversight, and regulatory auditability. Institutions activating siloed modules receive a scoped dashboard view limited to their activated components.</div>
+              <div class="command-grid">
+                <ul class="feature-list">
+                  <li>Live KYC submission queue with status pipeline</li>
+                  <li>One-click approve / reject with full audit logging</li>
+                  <li>Role-based access: admin, reviewer, risk analyst</li>
+                  <li>Institution-level configuration &amp; API key management</li>
+                </ul>
+                <ul class="feature-list">
+                  <li>Real-time anomaly &amp; fraud alert feed across all modules</li>
+                  <li>Account-level drill-down: KYC + transactions + score + loans</li>
+                  <li>Industry segment performance heatmap &amp; benchmarks</li>
+                  <li>BVN ecosystem loan score per borrower record</li>
+                </ul>
+                <ul class="feature-list">
+                  <li>Portfolio health: volume, turnover, NPL early warning rate</li>
+                  <li>Exportable compliance &amp; risk audit reports</li>
+                  <li>All PII encrypted at rest &amp; in transit (TLS)</li>
+                  <li>NDPR-aligned &middot; CBN KYC guideline-ready</li>
+                </ul>
+              </div>
+            </div>
           </div>
-          <ul class="feature-list fraud-list">
-            <li>Duplicate BVN &amp; National ID detection across all submissions</li>
-            <li>Synthetic identity &amp; suspicious data pattern flagging</li>
-            <li>Cross-module signal correlation: KYC + transaction + loan anomalies</li>
-            <li>Real-time admin alerts with Low / Medium / High / Critical tiering</li>
-            <li>Resolved vs. active alert queue with SLA tracking</li>
-            <li>Alert payload logging for regulatory &amp; legal evidence packages</li>
-          </ul>
         </div>
+
       </div>
 
-      <!-- ROW 4: Command Centre — Full-width capstone -->
-            <div class="feature-block fb-command">
-        <div class="feature-num fn-command">MODULE H &middot; COMMAND CENTRE</div>
-        <div class="feature-title" style="font-size:1.5rem;">Interactive Admin Dashboard — Evaluation &amp; Monitoring</div>
-        <div class="feature-body">A unified, real-time command centre consolidating all seven intelligence modules into a single interactive administrative interface — built for decision-making speed, institutional oversight, and regulatory auditability. Institutions activating siloed modules receive a scoped dashboard view limited to their activated components.</div>
-        <div class="command-grid">
-          <ul class="feature-list">
-            <li>Live KYC submission queue with status pipeline</li>
-            <li>One-click approve / reject with full audit logging</li>
-            <li>Role-based access: admin, reviewer, risk analyst</li>
-            <li>Institution-level configuration &amp; API key management</li>
-          </ul>
-          <ul class="feature-list">
-            <li>Real-time anomaly &amp; fraud alert feed across all modules</li>
-            <li>Account-level drill-down: KYC + transactions + score + loans</li>
-            <li>Industry segment performance heatmap &amp; benchmarks</li>
-            <li>BVN ecosystem loan score per borrower record</li>
-          </ul>
-          <ul class="feature-list">
-            <li>Portfolio health: volume, turnover, NPL early warning rate</li>
-            <li>Exportable compliance &amp; risk audit reports</li>
-            <li>All PII encrypted at rest &amp; in transit (TLS)</li>
-            <li>NDPR-aligned &middot; CBN KYC guideline-ready</li>
-          </ul>
+      <div class="carousel-controls">
+        <button class="carousel-arrow" id="prevBtn" aria-label="Previous">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M12 5l-5 5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="carousel-dots">
+          <button class="carousel-dot active" data-target="0"><span class="dot-inner"></span><span class="dot-label">A–B</span></button>
+          <button class="carousel-dot" data-target="1"><span class="dot-inner"></span><span class="dot-label">C–D</span></button>
+          <button class="carousel-dot" data-target="2"><span class="dot-inner"></span><span class="dot-label">E–F</span></button>
+          <button class="carousel-dot" data-target="3"><span class="dot-inner"></span><span class="dot-label">G–H</span></button>
         </div>
+        <button class="carousel-arrow" id="nextBtn" aria-label="Next">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M8 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="carousel-progress">
+        <div class="carousel-progress-bar" id="progressBar"></div>
+      </div>
+
+      <div class="carousel-counter">
+        <span id="slideNum">1</span><span class="counter-sep"> / </span>4
       </div>
 
     </div>
@@ -2030,45 +1923,6 @@ footer {
         <div style="font-size:13px;font-weight:500;color:var(--white);margin-bottom:4px;">Modular &amp; Siloed Deployment &nbsp;&middot;&nbsp; <span style="color:var(--teal);">All Tiers</span></div>
         <div style="font-size:12px;color:var(--muted);line-height:1.6;">Each component of the KYC, transaction monitoring, fraud intelligence, and ecosystem scoring stack can be deployed as a <strong style="color:var(--white);">standalone siloed product</strong> for institutions with specific use cases. An MFB that only needs KYC &amp; fraud detection need not activate transaction analytics or BVN scoring. A lending institution focused solely on loan performance monitoring can deploy Module F independently. Institutions pay for what they activate, at the tier that fits their scale.</div>
       </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Controls row -->
-      <div class="carousel-controls">
-        <button class="carousel-arrow" id="prevBtn" aria-label="Previous">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M12 5l-5 5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-
-        <div class="carousel-dots">
-          <button class="carousel-dot active" data-target="0" aria-label="A–B · Onboarding & Monitoring"><span class="dot-inner"></span><span class="dot-label">A–B</span></button>
-          <button class="carousel-dot" data-target="1" aria-label="C–D · Anomalies & Industry"><span class="dot-inner"></span><span class="dot-label">C–D</span></button>
-          <button class="carousel-dot" data-target="2" aria-label="E–F · Credit & Ecosystem"><span class="dot-inner"></span><span class="dot-label">E–F</span></button>
-          <button class="carousel-dot" data-target="3" aria-label="G–H · Fraud & Command Centre"><span class="dot-inner"></span><span class="dot-label">G–H</span></button>
-          
-        </div>
-
-        <button class="carousel-arrow" id="nextBtn" aria-label="Next">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M8 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-
-      <!-- Progress bar -->
-      <div class="carousel-progress">
-        <div class="carousel-progress-bar" id="progressBar"></div>
-      </div>
-
-      <!-- Slide counter -->
-      <div class="carousel-counter">
-        <span id="slideNum">1</span> <span class="counter-sep">/</span> 4
-      </div>
-
-    </div>
-
     </div>
 
   </div>
@@ -2190,114 +2044,72 @@ window.addEventListener('scroll', () => {
   });
 });
 </script>
-
 <script>
 (function() {
-  const SLIDE_DURATION = 12000; // 12 seconds per slide — enough to read both cards
-  const TOTAL_SLIDES = 4;
+  var TOTAL = 4, DURATION = 12000;
+  var track = document.getElementById('carouselTrack');
+  var prev  = document.getElementById('prevBtn');
+  var next  = document.getElementById('nextBtn');
+  var dots  = document.querySelectorAll('.carousel-dot');
+  var bar   = document.getElementById('progressBar');
+  var num   = document.getElementById('slideNum');
+  var cur   = 0, timer = null, paused = false;
 
-  const track    = document.getElementById('carouselTrack');
-  const prevBtn  = document.getElementById('prevBtn');
-  const nextBtn  = document.getElementById('nextBtn');
-  const dots     = document.querySelectorAll('.carousel-dot');
-  const bar      = document.getElementById('progressBar');
-  const slideNum = document.getElementById('slideNum');
-
-  let current   = 0;
-  let timer     = null;
-  let barTimer  = null;
-  let paused    = false;
-
-  function goTo(idx, animate) {
-    // Clear timers
-    clearInterval(timer);
-    clearTimeout(barTimer);
-    if (animate === undefined) animate = true;
-
-    // Clamp
-    idx = ((idx % TOTAL_SLIDES) + TOTAL_SLIDES) % TOTAL_SLIDES;
-    current = idx;
-
-    // Move track
-    track.style.transition = animate ? 'transform 0.7s cubic-bezier(0.4,0,0.2,1)' : 'none';
-    track.style.transform = 'translateX(-' + (current * 100) + '%)';
-
-    // Trigger card entrance animation
-    const slides = document.querySelectorAll('.carousel-slide');
-    slides.forEach((s, i) => {
+  function goTo(n) {
+    clearTimeout(timer);
+    cur = ((n % TOTAL) + TOTAL) % TOTAL;
+    track.style.transition = 'transform 0.7s cubic-bezier(0.4,0,0.2,1)';
+    track.style.transform  = 'translateX(-' + (cur * 100) + '%)';
+    document.querySelectorAll('.carousel-slide').forEach(function(s, i) {
       s.classList.remove('entering');
-      if (i === current) {
-        void s.offsetWidth; // reflow
-        s.classList.add('entering');
-      }
+      if (i === cur) { void s.offsetWidth; s.classList.add('entering'); }
     });
-
-    // Update dots
-    dots.forEach((d, i) => d.classList.toggle('active', i === current));
-
-    // Update counter
-    slideNum.textContent = current + 1;
-
-    // Update arrows
-    prevBtn.disabled = false;
-    nextBtn.disabled = false;
-
-    // Start progress bar
-    bar.style.transition = 'none';
-    bar.style.width = '0%';
+    dots.forEach(function(d, i) { d.classList.toggle('active', i === cur); });
+    num.textContent = cur + 1;
+    prev.disabled = false; next.disabled = false;
+    bar.style.transition = 'none'; bar.style.width = '0%';
     void bar.offsetWidth;
-    bar.style.transition = 'width ' + SLIDE_DURATION + 'ms linear';
+    bar.style.transition = 'width ' + DURATION + 'ms linear';
     bar.style.width = '100%';
-
-    // Auto-advance
-    if (!paused) {
-      timer = setTimeout(function() { goTo(current + 1); }, SLIDE_DURATION);
-    }
+    if (!paused) timer = setTimeout(function() { goTo(cur + 1); }, DURATION);
   }
 
-  // Arrow controls
-  nextBtn.addEventListener('click', function() { goTo(current + 1); });
-  prevBtn.addEventListener('click', function() { goTo(current - 1); });
-
-  // Dot controls
-  dots.forEach(function(d, i) {
-    d.addEventListener('click', function() { goTo(i); });
+  next.addEventListener('click', function() { goTo(cur + 1); });
+  prev.addEventListener('click', function() { goTo(cur - 1); });
+  dots.forEach(function(d) {
+    d.addEventListener('click', function() { goTo(parseInt(d.getAttribute('data-target'))); });
   });
 
-  // Pause on hover
-  const carousel = document.getElementById('modulesCarousel');
-  carousel.addEventListener('mouseenter', function() {
-    paused = true;
-    clearTimeout(timer);
-    bar.style.animationPlayState = 'paused';
-    // Freeze progress bar width visually
-    const computed = getComputedStyle(bar).width;
-    const parent   = getComputedStyle(bar.parentElement).width;
+  var mc = document.getElementById('modulesCarousel');
+  mc.addEventListener('mouseenter', function() {
+    paused = true; clearTimeout(timer);
+    var bw = parseFloat(getComputedStyle(bar).width);
+    var pw = parseFloat(getComputedStyle(bar.parentElement).width);
     bar.style.transition = 'none';
-    bar.style.width = (parseFloat(computed) / parseFloat(parent) * 100) + '%';
+    bar.style.width = (bw / pw * 100).toFixed(1) + '%';
   });
-
-  carousel.addEventListener('mouseleave', function() {
+  mc.addEventListener('mouseleave', function() {
     paused = false;
-    // Restart from current position — go to next after full duration
-    bar.style.transition = 'none';
-    bar.style.width = '0%';
+    bar.style.transition = 'none'; bar.style.width = '0%';
     void bar.offsetWidth;
-    bar.style.transition = 'width ' + SLIDE_DURATION + 'ms linear';
+    bar.style.transition = 'width ' + DURATION + 'ms linear';
     bar.style.width = '100%';
-    timer = setTimeout(function() { goTo(current + 1); }, SLIDE_DURATION);
+    timer = setTimeout(function() { goTo(cur + 1); }, DURATION);
   });
-
-  // Keyboard navigation
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowRight') goTo(current + 1);
-    if (e.key === 'ArrowLeft')  goTo(current - 1);
+    if (e.key === 'ArrowRight') goTo(cur + 1);
+    if (e.key === 'ArrowLeft')  goTo(cur - 1);
   });
 
-  // Init
-  goTo(0, false);
+  track.style.transition = 'none';
+  track.style.transform  = 'translateX(0%)';
+  bar.style.transition   = 'none';
+  bar.style.width        = '0%';
+  void bar.offsetWidth;
+  bar.style.transition   = 'width ' + DURATION + 'ms linear';
+  bar.style.width        = '100%';
+  timer = setTimeout(function() { goTo(1); }, DURATION);
 })();
 </script>
-
 </body>
 </html>
